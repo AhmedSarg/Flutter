@@ -83,7 +83,7 @@ class _NewAppState extends State<NewApp> {
                             vertical: 10, horizontal: 20),
                         color: Colors.green,
                         child: const Text(
-                          "Green",
+                          "Greennnnnnn",
                           style: TextStyle(color: Colors.white, fontSize: 13.0),
                         ))),
               ),
