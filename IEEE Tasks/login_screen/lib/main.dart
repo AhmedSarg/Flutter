@@ -35,6 +35,8 @@ class NewApp extends StatefulWidget {
 class _NewAppState extends State<NewApp> {
   MaterialColor clr = Colors.green;
   String clrTitle = "Green";
+  bool passwordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,23 +56,40 @@ class _NewAppState extends State<NewApp> {
               Column(
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       prefixIcon: Icon(
                           Icons.email,
-                        color: Colors.green,
+                        color: clr,
+                      ),
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            passwordVisible = !passwordVisible;
+                          },
+                          icon: Icon(
+                            Icons.visibility,
+                            color: clr,
+                          )
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           width: 3,
-                          color: Colors.green,
+                          color: clr,
                           style: BorderStyle.solid
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 3,
+                            color: clr,
+                            style: BorderStyle.solid
+                        ),
+                        borderRadius: const BorderRadius.all(Radius.circular(50)),
                       ),
                       hintText: "Email",
-                      hintStyle: TextStyle(color: Colors.green),
+                      hintStyle: TextStyle(color: clr),
                       filled: true,
-                      fillColor: Colors.red,
+                      fillColor: Colors.white,
                     ),
                     validator: (String? value) {
                       if (value != null && value.contains('@')) {
