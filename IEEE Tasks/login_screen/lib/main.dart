@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Apppppp"),
+          title: const Text("App"),
         ),
         body: Container(
           width: double.infinity,
