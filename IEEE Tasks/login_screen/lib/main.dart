@@ -49,61 +49,96 @@ class _NewAppState extends State<NewApp> {
           height: double.infinity,
           color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        clr = Colors.red;
-                        clrTitle = "Red";
-                      });
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        color: Colors.red,
-                        child: const Text(
-                          "Red",
-                          style: TextStyle(color: Colors.white, fontSize: 13.0),
-                        ))),
-              ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        clr = Colors.green;
-                        clrTitle = "Green";
-                      });
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
+              Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(
+                          Icons.email,
                         color: Colors.green,
-                        child: const Text(
-                          "Green",
-                          style: TextStyle(color: Colors.white, fontSize: 13.0),
-                        ))),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 3,
+                          color: Colors.green,
+                          style: BorderStyle.solid
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                      ),
+                      hintText: "Email",
+                      hintStyle: TextStyle(color: Colors.green),
+                      filled: true,
+                      fillColor: Colors.red,
+                    ),
+                    validator: (String? value) {
+                      if (value != null && value.contains('@')) {
+                        return "Don't use @";
+                      }
+                      return null;
+                    }
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        clr = Colors.blue;
-                        clrTitle = "Blue";
-                      });
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        color: Colors.blue,
-                        child: const Text(
-                          "Blue",
-                          style: TextStyle(color: Colors.white, fontSize: 13.0),
-                        ))),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            clr = Colors.red;
+                            clrTitle = "Red";
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            color: Colors.red,
+                            child: const Text(
+                              "Red",
+                              style: TextStyle(color: Colors.white, fontSize: 13.0),
+                            ))),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            clr = Colors.green;
+                            clrTitle = "Green";
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            color: Colors.green,
+                            child: const Text(
+                              "Green",
+                              style: TextStyle(color: Colors.white, fontSize: 13.0),
+                            ))),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            clr = Colors.blue;
+                            clrTitle = "Blue";
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            color: Colors.blue,
+                            child: const Text(
+                              "Blue",
+                              style: TextStyle(color: Colors.white, fontSize: 13.0),
+                            ))),
+                  ),
+                ],
               ),
             ],
           ),
