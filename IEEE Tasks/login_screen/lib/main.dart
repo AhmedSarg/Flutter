@@ -33,9 +33,9 @@ class NewApp extends StatefulWidget {
 }
 
 class _NewAppState extends State<NewApp> {
-  MaterialColor clr = Colors.green;
-  String clrTitle = "Green";
-  bool passwordVisible = false;
+  MaterialColor _clr = Colors.green;
+  String _clrTitle = "Green";
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +43,8 @@ class _NewAppState extends State<NewApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text(clrTitle),
-          backgroundColor: clr,
+          title: Text(_clrTitle),
+          backgroundColor: _clr,
         ),
         body: Container(
           width: double.infinity,
@@ -59,21 +59,23 @@ class _NewAppState extends State<NewApp> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                           Icons.email,
-                        color: clr,
+                        color: _clr,
                       ),
                       suffixIcon: IconButton(
                           onPressed: () {
-                            passwordVisible = !passwordVisible;
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
                           },
                           icon: Icon(
-                            Icons.visibility,
-                            color: clr,
+                            _passwordVisible? Icons.visibility : Icons.visibility_off,
+                            color: _clr,
                           )
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           width: 3,
-                          color: clr,
+                          color: _clr,
                           style: BorderStyle.solid
                         ),
                         borderRadius: const BorderRadius.all(Radius.circular(50)),
@@ -81,13 +83,13 @@ class _NewAppState extends State<NewApp> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             width: 3,
-                            color: clr,
+                            color: _clr,
                             style: BorderStyle.solid
                         ),
                         borderRadius: const BorderRadius.all(Radius.circular(50)),
                       ),
                       hintText: "Email",
-                      hintStyle: TextStyle(color: clr),
+                      hintStyle: TextStyle(color: _clr),
                       filled: true,
                       fillColor: Colors.white,
                     ),
@@ -96,7 +98,9 @@ class _NewAppState extends State<NewApp> {
                         return "Don't use @";
                       }
                       return null;
-                    }
+                    },
+                    obscureText: !_passwordVisible,
+                    style: TextStyle(color: _clr),
                   )
                 ],
               ),
@@ -108,8 +112,8 @@ class _NewAppState extends State<NewApp> {
                     child: TextButton(
                         onPressed: () {
                           setState(() {
-                            clr = Colors.red;
-                            clrTitle = "Red";
+                            _clr = Colors.red;
+                            _clrTitle = "Red";
                           });
                         },
                         child: Container(
@@ -126,8 +130,8 @@ class _NewAppState extends State<NewApp> {
                     child: TextButton(
                         onPressed: () {
                           setState(() {
-                            clr = Colors.green;
-                            clrTitle = "Green";
+                            _clr = Colors.green;
+                            _clrTitle = "Green";
                           });
                         },
                         child: Container(
@@ -144,8 +148,8 @@ class _NewAppState extends State<NewApp> {
                     child: TextButton(
                         onPressed: () {
                           setState(() {
-                            clr = Colors.blue;
-                            clrTitle = "Blue";
+                            _clr = Colors.blue;
+                            _clrTitle = "Blue";
                           });
                         },
                         child: Container(
