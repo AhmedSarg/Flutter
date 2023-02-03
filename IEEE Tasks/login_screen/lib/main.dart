@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("App"),
+          title: const Text("Login Screen"),
         ),
         body: Container(
           width: double.infinity,
@@ -33,8 +33,6 @@ class NewApp extends StatefulWidget {
 }
 
 class _NewAppState extends State<NewApp> {
-  MaterialColor _clr = Colors.green;
-  String _clrTitle = "Green";
   bool _passwordVisible = false;
   String _email = "", _password = "";
   @override
@@ -75,110 +73,112 @@ class _NewAppState extends State<NewApp> {
               Container(
                 width: 300,
                 height: 300,
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20)
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextFormField(
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.account_circle,
-                          color: Colors.grey,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 3,
-                              color: Colors.white,
-                              style: BorderStyle.solid
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 3,
-                              color: Colors.white,
-                              style: BorderStyle.solid
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        hintText: "Email",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        filled: true,
-                        fillColor: Colors.black12,
-                      ),
-                      validator: (String? value) {
-                        if (value != null && !value.contains('@')) {
-                          return "Type Correct Email";
-                        }
-                        return null;
-                      },
-                      onSaved: (String? value) {
-                        _email = value!;
-                      },
-                      obscureText: false,
-                      style: const TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(
-                          Icons.lock,
-                          color: Colors.grey,
-                        ),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
-                            },
-                            icon: Icon(
-                              _passwordVisible? Icons.visibility : Icons.visibility_off,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.account_circle,
                               color: Colors.grey,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                            ),
+                            hintText: "Email",
+                            hintStyle: TextStyle(color: Colors.grey),
+                            filled: true,
+                            fillColor: Colors.black12,
+                          ),
+                          validator: (String? value) {
+                            if (value != null && !value.contains('@')) {
+                              return "Type Correct Email";
+                            }
+                            return null;
+                          },
+                          onSaved: (String? value) {
+                            _email = value!;
+                          },
+                          obscureText: false,
+                          style: const TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                    TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
+                                icon: Icon(
+                                  _passwordVisible? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.grey,
+                                )
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 3,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                            ),
+                            hintText: "Password",
+                            hintStyle: const TextStyle(color: Colors.grey),
+                            filled: true,
+                            fillColor: Colors.black12,
+                          ),
+                          validator: (String? value) {
+                            if (value != null && value.length < 8) {
+                              return "Type Correct Password";
+                            }
+                            return null;
+                          },
+                          onSaved: (String? value) {
+                            _password = value!;
+                          },
+                          obscureText: !_passwordVisible,
+                          style: const TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                    TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              "Forgot Password?",
+                              style: TextStyle(color: Colors.grey),
                             )
                         ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 3,
-                              color: Colors.white,
-                              style: BorderStyle.solid
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 3,
-                              color: Colors.white,
-                              style: BorderStyle.solid
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        hintText: "Password",
-                        hintStyle: const TextStyle(color: Colors.grey),
-                        filled: true,
-                        fillColor: Colors.black12,
-                      ),
-                      validator: (String? value) {
-                        if (value != null && value.length < 8) {
-                          return "Type Correct Password";
-                        }
-                        return null;
-                      },
-                      onSaved: (String? value) {
-                        _password = value!;
-                      },
-                      obscureText: !_passwordVisible,
-                      style: const TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                            "Forgot Password?",
-                          style: TextStyle(color: Colors.grey),
-                        )
-                    ),
                     Column(
                       children: [
                         TextButton(
@@ -186,19 +186,33 @@ class _NewAppState extends State<NewApp> {
                           child: Container(
                             width: 100,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
+                              borderRadius: BorderRadius.circular(80),
                               color: Colors.deepPurple
                             ),
                             padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
+                                vertical: 8, horizontal: 20),
                             child: const Center(
                               child: Text(
-                                "Login",
-                                style: TextStyle(color: Colors.white, fontSize: 13.0),
+                                "LOGIN",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400
+                                ),
                               ),
                             )
                           )
                         ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            "SIGNUP",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500
+                            ),
+                          )
+                        )
                       ],
                     )
                   ]
@@ -211,69 +225,3 @@ class _NewAppState extends State<NewApp> {
     );
   }
 }
-/*TextFormField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                          Icons.email,
-                        color: _clr,
-                      ),
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                          icon: Icon(
-                            _passwordVisible? Icons.visibility : Icons.visibility_off,
-                            color: _clr,
-                          )
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 3,
-                          color: _clr,
-                          style: BorderStyle.solid
-                        ),
-                        borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 3,
-                            color: _clr,
-                            style: BorderStyle.solid
-                        ),
-                        borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      ),
-                      hintText: "Email",
-                      hintStyle: TextStyle(color: _clr),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    validator: (String? value) {
-                      if (value != null && value.contains('@')) {
-                        return "Don't use @";
-                      }
-                      return null;
-                    },
-                    obscureText: !_passwordVisible,
-                    style: TextStyle(color: _clr),
-                  )*/
-
-/*TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _clr = Colors.red;
-                            _clrTitle = "Red";
-                          });
-                        },
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            color: Colors.red,
-                            child: const Text(
-                              "Red",
-                              style: TextStyle(color: Colors.white, fontSize: 13.0),
-                            )
-                        )
-                    ),
-                  ),*/
