@@ -6,16 +6,13 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -40,29 +37,82 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    bool mode = false;
+    final pages = [
+      Center(
+          child:
+          ListView.separated(
+              itemBuilder: (context, index) => Container(
+                margin: const EdgeInsets.all(8),
+                child: const Text("Flutter"),
+              ),
+              separatorBuilder: (context, index) => Container(
+                height:5,
+                width: double.infinity,
+                color: Colors.red,
+              ),
+              itemCount: 5
+          )
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+      Text("data"),
+      Text("data")
+    ];
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: mode == false ? ThemeData.light() : ThemeData.dark(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: [
+            Switch(
+              value: mode,
+              onChanged: (value) {
+                setState () {
+                  mode = value;
+                }
+              }
+            )
           ],
+          bottom: DefaultTabController(length: 3, child: Text("choose")),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        body: TabBarView(
+          children: pages,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
 }
+
+/*
+class MyTile extends StatelessWidget {
+  MyTile(this, index);
+  int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const CircleAvatar(
+        radius: 30,
+        backgroundColor: Colors.green,
+      ),
+      title: Text("user$index"),
+      subtitle: const Text("message"),
+      trailing: Column(
+        children: const [
+          Text("10:20"),
+          CircleAvatar(
+            radius: 10,
+            backgroundColor: Colors.green,
+          ),
+        ],
+      ),
+    );
+  }
+}
+*/
+
