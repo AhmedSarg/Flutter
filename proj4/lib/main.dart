@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,10 +35,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+  bool mode = false;
 
   @override
   Widget build(BuildContext context) {
-    bool mode = false;
     final pages = [
       Center(
           child:
@@ -60,28 +61,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: mode == false ? ThemeData.light() : ThemeData.dark(),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          actions: [
-            Switch(
-              value: mode,
-              onChanged: (value) {
-                setState () {
-                  mode = value;
-                }
-              }
-            )
-          ],
-          bottom: DefaultTabController(length: 3, child: Text("choose")),
-        ),
-        body: TabBarView(
-          children: pages,
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+             actions: [
+              Switch(
+                value: mode,
+                onChanged: (value) {
+                  setState(() {
+                    mode = value;
+                  });
+                },
+              )
+            ],
+          ),
+          body: TabBarView(
+            children: pages
+          ),
         ),
       ),
     );
