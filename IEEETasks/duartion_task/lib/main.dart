@@ -1,10 +1,6 @@
-import 'package:duartion_task/GenerateScreen.dart';
 import 'package:duartion_task/SelectionScreen.dart';
 import 'package:duartion_task/SplashScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:barcode_scan2/barcode_scan2.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());

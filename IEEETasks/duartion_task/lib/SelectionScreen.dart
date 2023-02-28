@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'GenerateScreen.dart';
-import 'package:duartion_task/SplashScreen.dart';
-import 'package:flutter/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
@@ -107,7 +105,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
           result = "Unknown Error $e";
         });
       }
-    } on FormatException catch (e) {
+    } on FormatException {
       setState(() {
         result = "No QR Code Scanned";
       });
