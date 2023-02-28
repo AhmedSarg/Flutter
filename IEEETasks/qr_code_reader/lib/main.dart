@@ -1,5 +1,5 @@
-import 'package:duartion_task/SelectionScreen.dart';
-import 'package:duartion_task/SplashScreen.dart';
+import 'package:qr_code_reader/SelectionScreen.dart';
+import 'package:qr_code_reader/SplashScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'QR Code',
+      title: 'QR Code Reader',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
