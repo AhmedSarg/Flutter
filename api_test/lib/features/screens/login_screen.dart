@@ -1,4 +1,3 @@
-import 'package:api_test/core/database/api/dio_consumer.dart';
 import 'package:api_test/core/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
