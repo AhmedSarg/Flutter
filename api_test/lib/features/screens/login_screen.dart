@@ -1,4 +1,5 @@
 import 'package:api_test/core/database/api/dio_consumer.dart';
+import 'package:api_test/core/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,12 +33,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextFormField(
                   controller: emailController,
                   validator: (value) {
-                    if (value!.isNotEmpty &&
-                        value.contains('@') &&
-                        value.contains(".com")) {
+                    if (value!.isNotEmpty) {
                       return null;
                     } else {
-                      return "enter valid email";
+                      return "enter email";
                     }
                   },
                   decoration: InputDecoration(
@@ -53,10 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextFormField(
                   controller: passwordController,
                   validator: (value) {
-                    if (value!.isNotEmpty && value.length >= 8) {
+                    if (value!.isNotEmpty) {
                       return null;
                     } else {
-                      return "enter valid password";
+                      return "enter password";
                     }
                   },
                   decoration: InputDecoration(
@@ -88,12 +87,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            UserService()
+                                .findPassforEmail(
+                                    email: emailController.text,
+                                    password: passwordController.text)
+                                .then((value) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Message"),
+                                      content: Text(value),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("OK"))
+                                      ],
+                                    );
+                                  });
+                            });
+                          }
+                        },
                         child: const Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text("Login"),
                         )),
-                    ElevatedButton(
+                    /*ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             showDialog(
@@ -101,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text("Message"),
-                                    content: const Text("Login Succesfully"),
+                                    content: const Text("Signup Succesfully"),
                                     actions: [
                                       TextButton(
                                           onPressed: () {
@@ -116,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Padding(
                           padding: EdgeInsets.all(10),
                           child: Text("Signup"),
-                        ))
+                        ))*/
                   ],
                 ),
               )

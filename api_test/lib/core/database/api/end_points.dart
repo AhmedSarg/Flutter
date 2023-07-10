@@ -4,7 +4,6 @@ class EndPoints {
   static const String ceckMail = "chef/check-email";
 
   static const String signIn = "signin";
-
 }
 
 class ApiKeys {
