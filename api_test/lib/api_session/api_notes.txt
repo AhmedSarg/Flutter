@@ -1,5 +1,0 @@
-API Session
-Intro to API
-Json place holder
-http package
-json parsing
