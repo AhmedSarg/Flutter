@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ieee_ticket_scanner">
+    package="com.example.api_test">
    <application
-        android:label="ieee_ticket_scanner"
+        android:label="Api Test"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
