@@ -6,7 +6,7 @@ class AppColors {
   static const Color primary = Color(0xff003844);
   static const Color secondery = Color(0xff330F0A);
   static const Color terinary = Color(0xffEC9A29);
-  static const Color grey = Color(0xff737477);
+  static const Color grey = Color(0xff737477737477);
   static const Color white = Color(0xffEEF0F2);
   static const Color offWhite = Color(0xFFECEBE4);
   static const Color transperantOffWhite = Color(0x22ECEBE4);

@@ -21,7 +21,7 @@ class MovieModel {
     String basePosterUrl = "https://image.tmdb.org/t/p/original";
     return MovieModel(
         id: jsonData["id"],
-        title: jsonData["original_title"],
+        title: jsonData["title"],
         poster: basePosterUrl + jsonData["poster_path"],
         releaseDate: jsonData["release_date"],
         language: jsonData["original_language"],

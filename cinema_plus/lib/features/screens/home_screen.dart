@@ -1,6 +1,6 @@
 import 'package:cinema_plus/core/services/movie_service.dart';
+import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../core/utils/app_colors.dart';
 
@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late MovieModel movieModel;
 
   @override
   void initState() {
@@ -29,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    MovieService movieService = MovieService(movieId: 872585);
+    MovieService movieService = MovieService();
+    Future<List<MovieModel>> trending = MovieService().getTrending();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -40,7 +42,17 @@ class _HomeScreenState extends State<HomeScreen>
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.white,
-          tabs: const [Tab(text: "Movies"), Tab(text: "Series")],
+          tabs: const [
+            Tab(
+              child: Text(
+                "Movies",
+                style: TextStyle(color: AppColors.white),
+              ),
+            ),
+            Tab(
+              text: "Series",
+            )
+          ],
         ),
       ),
       body: Container(
@@ -51,19 +63,29 @@ class _HomeScreenState extends State<HomeScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-                onPressed: () => movieService.getMovie(),
-                child: const Text("Click For Oppenheimer")),
-            // Center(
-            //   child: ListView.separated(
-            //     scrollDirection: Axis.vertical,
-            //     separatorBuilder: (BuildContext context, int index) =>
-            //         const Divider(),
-            //     itemCount: 5,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return movie();
-            //     },
-            //   ),
-            // ),
+                onPressed: () async {
+                  //movieModel = await movieService.getMovie(872585);
+                  print(trending.runtimeType);
+                },
+                child: const Text(
+                  "Click For Oppenheimer",
+                  style: TextStyle(color: AppColors.white, fontFamily: "REM"),
+                )),
+            Center(
+              child: SizedBox(
+                height: 200,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                  itemCount: 5,
+                  itemBuilder: (BuildContext context, int index) {
+                    return movies();
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -71,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-Widget movie() {
+Widget movies(/*MovieModel movie*/) {
   return Container(
     margin: const EdgeInsets.all(20),
-    height: 100,
-    width: 100,
+    height: 50,
+    width: 150,
     color: AppColors.transperantOffWhite,
     child: const Center(
       child: Text(
