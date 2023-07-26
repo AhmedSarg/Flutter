@@ -26,13 +26,12 @@ class MovieService {
     late List<dynamic> result;
     late List<MovieModel> popularMovies = [];
     final dio = Dio();
-    dio.get(url).then((value) {
+    await dio.get(url).then((value) {
       result = value.data["results"];
-      result.forEach((movie) {
-        MovieModel movieModel = MovieModel.fromJson(movie);
-        popularMovies.add(movieModel);
-      });
-      return popularMovies;
+    });
+    result.forEach((movie) {
+      MovieModel movieModel = MovieModel.fromJson(movie);
+      popularMovies.add(movieModel);
     });
     return popularMovies;
   }
