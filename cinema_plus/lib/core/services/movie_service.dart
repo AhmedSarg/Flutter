@@ -1,4 +1,3 @@
-import 'package:dartz/dartz_unsafe.dart';
 import 'package:dio/dio.dart';
 
 import '../../features/model/movie_model.dart';
@@ -19,8 +18,7 @@ class MovieService {
     return movieModel;
   }
 
-  Future<List<MovieModel>> getTrending() async {
-    print("get trending");
+  Future<List<MovieModel>> getPopular() async {
     String endpoint = "popular";
     String url = baseUrl + endpoint + apiKey;
     late List<dynamic> result;
@@ -34,5 +32,21 @@ class MovieService {
       popularMovies.add(movieModel);
     });
     return popularMovies;
+  }
+
+  Future<List<MovieModel>> getTopRated() async {
+    String endpoint = "top_rated";
+    String url = baseUrl + endpoint + apiKey;
+    late List<dynamic> result;
+    late List<MovieModel> topRatedMovies = [];
+    final dio = Dio();
+    await dio.get(url).then((value) {
+      result = value.data["results"];
+    });
+    result.forEach((movie) {
+      MovieModel movieModel = MovieModel.fromJson(movie);
+      topRatedMovies.add(movieModel);
+    });
+    return topRatedMovies;
   }
 }
