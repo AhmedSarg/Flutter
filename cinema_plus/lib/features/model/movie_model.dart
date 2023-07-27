@@ -6,7 +6,7 @@ class MovieModel {
   final String language;
   final String overview;
   final String rating;
-  final String totalVotes;
+  final int totalVotes;
   final String backDrop;
 
   MovieModel({
