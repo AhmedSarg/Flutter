@@ -1,4 +1,4 @@
-class MovieModel {
+class SeriesModel {
   final int id;
   final String title;
   final String poster;
@@ -9,7 +9,7 @@ class MovieModel {
   final String totalVotes;
   final String backDrop;
 
-  MovieModel({
+  SeriesModel({
     required this.id,
     required this.title,
     required this.poster,
@@ -21,11 +21,11 @@ class MovieModel {
     required this.backDrop,
   });
 
-  factory MovieModel.fromJson(Map jsonData) {
+  factory SeriesModel.fromJson(Map jsonData) {
     String base500PosterUrl = "https://image.tmdb.org/t/p/w500";
     String baseOrgPosterUrl = "https://image.tmdb.org/t/p/original";
     String errorHandle = ".0";
-    return MovieModel(
+    return SeriesModel(
       id: jsonData["id"],
       title: jsonData["title"],
       poster: base500PosterUrl + jsonData["poster_path"],

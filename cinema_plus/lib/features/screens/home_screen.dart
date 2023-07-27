@@ -1,9 +1,9 @@
 import 'package:cinema_plus/core/services/movie_service.dart';
-import 'package:cinema_plus/core/widgets/other/loading_indicator.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/services/series_service.dart';
 import '../../core/utils/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,12 +18,13 @@ class _HomeScreenState extends State<HomeScreen>
   late TabController _tabController;
   late MovieModel movieModel;
   late MovieService movieService;
+  late SeriesService seriesService;
 
   @override
   void initState() {
     super.initState();
     movieService = MovieService();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -47,6 +48,12 @@ class _HomeScreenState extends State<HomeScreen>
           tabs: const [
             Tab(
               child: Text(
+                "Explore",
+                style: TextStyle(color: AppColors.white),
+              ),
+            ),
+            Tab(
+              child: Text(
                 "Movies",
                 style: TextStyle(color: AppColors.white),
               ),
@@ -68,8 +75,8 @@ class _HomeScreenState extends State<HomeScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              moviesList(movieService.getPopular(), "Popular"),
-              moviesList(movieService.getTopRated(), "Top Rated"),
+              moviesList(movieService.getPopular(), "Popular Movies"),
+              moviesList(movieService.getTopRated(), "Top Rated Movies"),
             ],
           ),
         ),
@@ -136,7 +143,10 @@ Widget moviesList(movies, title) {
                         bottomLeft: Radius.circular(10),
                       ),
                     ),
-                    child: const Center(child: CircularProgressIndicator()),
+                    child: const Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                    )),
                   );
                   ;
                 },
@@ -153,10 +163,13 @@ Widget moviesList(movies, title) {
 Widget movie(context, MovieModel movie) {
   return GestureDetector(
     onTap: () {
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).push(
+        MaterialPageRoute(
           builder: ((context) => MoviePage(
                 movie: movie,
-              ))));
+              )),
+        ),
+      );
     },
     child: Container(
       margin: const EdgeInsets.all(20),
@@ -203,7 +216,9 @@ Widget movie(context, MovieModel movie) {
                           return child;
                         } else {
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1,
+                            ),
                           );
                         }
                       },

@@ -6,7 +6,7 @@ void main() {
   runApp(const MyApp());
 }
 
-const MaterialColor primarySwatch = MaterialColor(0xFFEC9A29, <int, Color>{
+const MaterialColor primarySwatch = MaterialColor(0xFFCC7A09, <int, Color>{
   50: AppColors.white,
   100: AppColors.offWhite,
   200: AppColors.black,
