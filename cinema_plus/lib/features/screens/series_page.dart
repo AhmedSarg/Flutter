@@ -32,7 +32,7 @@ class SeriesPage extends StatelessWidget {
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: Image.network(
-                        series.backDrop,
+                        series.backdrop,
                         width: 360,
                         height: 202.7,
                         loadingBuilder: (context, child, loadingProgress) {

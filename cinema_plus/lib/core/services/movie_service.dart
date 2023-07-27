@@ -28,9 +28,21 @@ class MovieService {
       result = value.data["results"];
     });
     result.forEach((movie) {
-      MovieModel movieModel = MovieModel.fromJson(movie);
-      popularMovies.add(movieModel);
+      if (movie["backdrop_path"] != null &&
+          movie["poster_path"] != null &&
+          movie["title"] != null &&
+          movie["release_date"] != null &&
+          movie["original_language"] != null &&
+          movie["overview"] != null &&
+          movie["vote_average"] != null &&
+          movie["vote_count"] != null) {
+        MovieModel movieModel = MovieModel.fromJson(movie);
+        popularMovies.add(movieModel);
+      }
     });
+    popularMovies.sort(((a, b) {
+      return b.rating.compareTo(a.rating);
+    }));
     return popularMovies;
   }
 
@@ -44,8 +56,17 @@ class MovieService {
       result = value.data["results"];
     });
     result.forEach((movie) {
-      MovieModel movieModel = MovieModel.fromJson(movie);
-      topRatedMovies.add(movieModel);
+      if (movie["backdrop_path"] != null &&
+          movie["poster_path"] != null &&
+          movie["title"] != null &&
+          movie["release_date"] != null &&
+          movie["original_language"] != null &&
+          movie["overview"] != null &&
+          movie["vote_average"] != null &&
+          movie["vote_count"] != null) {
+        MovieModel movieModel = MovieModel.fromJson(movie);
+        topRatedMovies.add(movieModel);
+      }
     });
     return topRatedMovies;
   }

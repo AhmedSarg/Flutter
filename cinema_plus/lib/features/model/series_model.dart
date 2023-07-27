@@ -5,9 +5,10 @@ class SeriesModel {
   final String releaseDate;
   final String language;
   final String overview;
-  final String rating;
+  final double rating;
   final int totalVotes;
-  final String backDrop;
+  final String backdrop;
+  late String tagline;
 
   SeriesModel({
     required this.id,
@@ -18,19 +19,12 @@ class SeriesModel {
     required this.overview,
     required this.rating,
     required this.totalVotes,
-    required this.backDrop,
+    required this.backdrop,
   });
 
   factory SeriesModel.fromJson(Map jsonData) {
     String base500PosterUrl = "https://image.tmdb.org/t/p/w500";
     String baseOrgPosterUrl = "https://image.tmdb.org/t/p/original";
-    String errorHandle = ".0";
-    String bkdrp;
-    if (jsonData["backdrop_path"].runtimeType != null) {
-      bkdrp = baseOrgPosterUrl + jsonData["backdrop_path"];
-    } else {
-      bkdrp = base500PosterUrl + jsonData["poster_path"];
-    }
     return SeriesModel(
       id: jsonData["id"],
       title: jsonData["name"],
@@ -38,10 +32,9 @@ class SeriesModel {
       releaseDate: jsonData["first_air_date"],
       language: jsonData["original_language"],
       overview: jsonData["overview"],
-      rating:
-          (jsonData["vote_average"].toString() + errorHandle).substring(0, 3),
+      rating: double.parse((jsonData["vote_average"]).toStringAsFixed(2)),
       totalVotes: jsonData["vote_count"],
-      backDrop: bkdrp,
+      backdrop: baseOrgPosterUrl + jsonData["backdrop_path"],
     );
   }
 }

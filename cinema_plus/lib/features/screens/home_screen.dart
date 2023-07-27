@@ -4,6 +4,7 @@ import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../core/services/series_service.dart';
 import '../../core/utils/app_colors.dart';
@@ -45,6 +46,12 @@ class _HomeScreenState extends State<HomeScreen>
           "Cinema Plus",
           style: TextStyle(color: AppColors.white, fontFamily: "REM"),
         ),
+        actions: [
+          IconButton(
+            onPressed: (() {}),
+            icon: const Icon(Icons.search),
+          )
+        ],
         backgroundColor: AppColors.terinary,
         bottom: TabBar(
           controller: _tabController,
@@ -328,7 +335,7 @@ Widget movie(context, MovieModel movie) {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            movie.rating,
+                            movie.rating.toString(),
                             style: const TextStyle(
                                 color: AppColors.white,
                                 fontFamily: "REM",
@@ -449,7 +456,7 @@ Widget serie(context, SeriesModel serie) {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            serie.rating,
+                            serie.rating.toString(),
                             style: const TextStyle(
                                 color: AppColors.white,
                                 fontFamily: "REM",

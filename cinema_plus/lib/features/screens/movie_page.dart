@@ -11,9 +11,7 @@ class MoviePage extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             movie.title,
-            style: const TextStyle(
-              color: AppColors.white,
-            ),
+            style: const TextStyle(color: AppColors.white, fontFamily: "REM"),
           ),
         ),
         body: Column(
@@ -30,7 +28,7 @@ class MoviePage extends StatelessWidget {
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: Image.network(
-                        movie.backDrop,
+                        movie.backdrop,
                         width: 360,
                         height: 202.7,
                         loadingBuilder: (context, child, loadingProgress) {
@@ -108,7 +106,11 @@ class MoviePage extends StatelessWidget {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.only(left: 15, right: 15, top: 50),
+                        padding: EdgeInsets.only(
+                          left: 15,
+                          right: 15,
+                          top: 35,
+                        ),
                         child: Text(
                           "Overview",
                           style: TextStyle(
@@ -119,8 +121,8 @@ class MoviePage extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 10),
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 10, bottom: 15),
                         child: Text(
                           movie.overview,
                           style: const TextStyle(
@@ -130,6 +132,16 @@ class MoviePage extends StatelessWidget {
                               fontWeight: FontWeight.w900),
                         ),
                       ),
+                      ListView.separated(
+                          itemBuilder: ((context, index) {
+                            return const SizedBox(
+                              width: 100,
+                              height: 100,
+                            );
+                          }),
+                          separatorBuilder: ((context, index) =>
+                              const Divider()),
+                          itemCount: 4),
                     ],
                   ),
                 ),

@@ -21,11 +21,9 @@ class SeriesService {
 
   Future<List<SeriesModel>> getPopular() async {
     String endpoint = "discover/tv";
-    //String query = "&vote_average.lte=8&vote_average.gte=9.2";
     String query =
-        "&sort_by=vote_average.desc&vote_average.lte=8.6&vote_average.gte=8";
+        "&vote_average.lte=10&vote_average.gte=8&with_original_language=en";
     String url = baseUrl + endpoint + apiKey + query;
-    print(url);
     late List<dynamic> result;
     late List<SeriesModel> popularSeries = [];
     final dio = Dio();
@@ -45,6 +43,9 @@ class SeriesService {
         popularSeries.add(seriesModel);
       }
     });
+    popularSeries.sort(((a, b) {
+      return b.rating.compareTo(a.rating);
+    }));
     return popularSeries;
   }
 
@@ -58,8 +59,17 @@ class SeriesService {
       result = value.data["results"];
     });
     result.forEach((series) {
-      SeriesModel seriesModel = SeriesModel.fromJson(series);
-      topRatedSeries.add(seriesModel);
+      if (series["backdrop_path"] != null &&
+          series["poster_path"] != null &&
+          series["name"] != null &&
+          series["first_air_date"] != null &&
+          series["original_language"] != null &&
+          series["overview"] != null &&
+          series["vote_average"] != null &&
+          series["vote_count"] != null) {
+        SeriesModel seriesModel = SeriesModel.fromJson(series);
+        topRatedSeries.add(seriesModel);
+      }
     });
     return topRatedSeries;
   }
