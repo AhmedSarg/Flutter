@@ -10,7 +10,7 @@ class MovieService {
     late Map result;
     String url = baseUrl + movie.id.toString() + apiKey;
     String imgBaseUrl = "https://image.tmdb.org/t/p/w200";
-    String castEndpoint = "credits";
+    String castEndpoint = "/credits";
     final dio = Dio();
     await dio.get(url).then((value) {
       result = value.data;
@@ -73,9 +73,15 @@ class MovieService {
       cast = value.data["cast"];
     });
     cast.forEach((actor) {
-      movie.cast.add({"name": actor["name"]});
-      movie.cast.add({"character": actor["character"]});
-      movie.cast.add({"img": imgBaseUrl + actor["profile_path"]});
+      if (actor["name"] != null &&
+          actor["character"] != null &&
+          actor["profile_path"] != null) {
+        movie.cast.add({
+          "name": actor["name"],
+          "character": actor["character"],
+          "img": imgBaseUrl + actor["profile_path"],
+        });
+      }
     });
     return movie;
   }
