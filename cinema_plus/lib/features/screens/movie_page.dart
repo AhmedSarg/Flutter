@@ -8,8 +8,7 @@ class MoviePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //print(
-    //    "title: ${movie.title}\ntagline: ${movie.tagline}\ngenres: ${movie.genres}\nstatus: ${movie.status}\nrevenue: ${movie.revenue}\nbudget: ${movie.budget}");
-    print(movie.cast);
+    //    "title: ${movie.title}\ntagline: ${movie.tagline}\ngenres: ${movie.genres}\nstatus: ${movie.status}\nrevenue: ${movie.revenue}\nbudget: ${movie.budget}\ncast: ${movie.cast}");
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -136,18 +135,12 @@ class MoviePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 120,
+                        height: 290,
                         child: ListView.separated(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: ((context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 100,
-                                color: AppColors.terinary,
-                              ),
-                            );
+                            return actorCard(context, movie.cast[index]);
                           }),
                           separatorBuilder: ((context, index) =>
                               const Divider()),
@@ -162,4 +155,90 @@ class MoviePage extends StatelessWidget {
           ],
         ));
   }
+}
+
+Widget actorCard(context, Map<String, String> actor) {
+  return GestureDetector(
+    onTap: () {},
+    child: Container(
+      margin: const EdgeInsets.all(20),
+      width: 120,
+      decoration: const BoxDecoration(
+          color: AppColors.transperantOffWhite,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: Container(
+              height: 180,
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              )),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                child: Image.network(
+                  actor["img"]!,
+                  width: 400,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.warning)),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
+            child: Text(
+              actor["name"]!,
+              softWrap: true,
+              style: const TextStyle(
+                fontFamily: "REM",
+                fontSize: 12,
+                color: AppColors.offWhite,
+                fontWeight: FontWeight.w100,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+              child: Text(
+                actor["character"]!,
+                softWrap: true,
+                style: const TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: 10,
+                  color: AppColors.offWhite,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
