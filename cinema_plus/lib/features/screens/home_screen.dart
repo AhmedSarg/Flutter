@@ -372,10 +372,13 @@ Widget movie(context, MovieModel movie) {
 
 Widget serie(context, SeriesModel serie) {
   return GestureDetector(
-    onTap: () {
-      Navigator.of(context).push(
+    onTap: () async {
+      await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: ((context) => SeriesPage(series: serie)),
+          builder: ((context) => SeriesPage(
+                serie: SeriesService().getSeriesDetails(serie),
+                title: serie.title,
+              )),
         ),
       );
     },

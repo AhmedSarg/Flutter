@@ -13,11 +13,6 @@ class MoviePage extends StatefulWidget {
 
 class _MoviePageState extends State<MoviePage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     //print(
     //    "title: ${movie.title}\ntagline: ${movie.tagline}\ngenres: ${movie.genres}\nstatus: ${movie.status}\nrevenue: ${movie.revenue}\nbudget: ${movie.budget}\ncast: ${movie.cast}");
