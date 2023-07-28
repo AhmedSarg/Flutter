@@ -77,6 +77,7 @@ class MovieService {
           actor["character"] != null &&
           actor["profile_path"] != null) {
         movie.cast.add({
+          "id": actor["id"],
           "name": actor["name"],
           "character": actor["character"],
           "img": imgBaseUrl + actor["profile_path"],

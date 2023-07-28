@@ -157,7 +157,7 @@ class MoviePage extends StatelessWidget {
   }
 }
 
-Widget actorCard(context, Map<String, String> actor) {
+Widget actorCard(context, Map<String, dynamic> actor) {
   return GestureDetector(
     onTap: () {},
     child: Container(

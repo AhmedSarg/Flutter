@@ -13,7 +13,7 @@ class MovieModel {
   late String status;
   late String revenue;
   late String budget;
-  late List<Map<String, String>> cast = [];
+  late List<Map<String, dynamic>> cast = [];
 
   MovieModel({
     required this.id,
