@@ -1,3 +1,4 @@
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:dio/dio.dart';
 
 import '../../features/model/series_model.dart';
@@ -6,17 +7,46 @@ class SeriesService {
   String baseUrl = "https://api.themoviedb.org/3/";
   String apiKey = "?api_key=044da023c2f912e4b5937f76528b4669";
 
-  Future<SeriesModel> getSeries(int seriesId) async {
+  Future<SeriesModel> getSeriesDetails(SeriesModel serie) async {
     late Map result;
-    late SeriesModel seriesModel;
-    String endpoint = "tv/$seriesId";
-    String url = baseUrl + endpoint + apiKey;
+    String imgBaseUrl = "https://image.tmdb.org/t/p/w200";
+    String castEndpoint = "/credits";
+    String seriesEndpoint = "tv/";
+    String url = baseUrl + seriesEndpoint + serie.id.toString() + apiKey;
     final dio = Dio();
     await dio.get(url).then((value) {
       result = value.data;
     });
-    seriesModel = SeriesModel.fromJson(result);
-    return seriesModel;
+    serie.tagline = result["tagline"];
+    result["genres"].forEach((genre) {
+      serie.genres.add(genre["name"]);
+    });
+    serie.status = result["status"];
+    url =
+        baseUrl + seriesEndpoint + serie.id.toString() + castEndpoint + apiKey;
+    result["seasons"].forEach((season) {
+      if (season["season_number"] > 0) {
+        serie.seasons.add(season);
+      }
+    });
+    serie.totalEpisodes = result["number_of_episodes"];
+    late List<dynamic> cast;
+    await dio.get(url).then((value) {
+      cast = value.data["cast"];
+    });
+    cast.forEach((actor) {
+      if (actor["name"] != null &&
+          actor["character"] != null &&
+          actor["profile_path"] != null) {
+        serie.cast.add({
+          "id": actor["id"],
+          "name": actor["name"],
+          "character": actor["character"],
+          "img": imgBaseUrl + actor["profile_path"],
+        });
+      }
+    });
+    return serie;
   }
 
   Future<List<SeriesModel>> getPopular() async {

@@ -9,6 +9,11 @@ class SeriesModel {
   final int totalVotes;
   final String backdrop;
   late String tagline;
+  late List<String> genres = [];
+  late String status;
+  late List<Map<String, dynamic>> seasons = [];
+  late int totalEpisodes;
+  late List<Map<String, dynamic>> cast = [];
 
   SeriesModel({
     required this.id,
