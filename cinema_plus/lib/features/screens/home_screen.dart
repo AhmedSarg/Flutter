@@ -4,7 +4,6 @@ import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../core/services/series_service.dart';
 import '../../core/utils/app_colors.dart';
@@ -250,11 +249,11 @@ Widget seriesList(series, title) {
 Widget movie(context, MovieModel movie) {
   return GestureDetector(
     onTap: () async {
-      movie = await MovieService().getMovieDetails(movie);
-      Navigator.of(context).push(
+      await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => MoviePage(
-                movie: movie,
+                movie: MovieService().getMovieDetails(movie),
+                title: movie.title,
               )),
         ),
       );

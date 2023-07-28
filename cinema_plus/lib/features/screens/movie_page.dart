@@ -2,158 +2,193 @@ import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:flutter/material.dart';
 
-class MoviePage extends StatelessWidget {
-  final MovieModel movie;
-  const MoviePage({super.key, required this.movie});
+class MoviePage extends StatefulWidget {
+  final Future<MovieModel> movie;
+  final String title;
+  const MoviePage({super.key, required this.movie, required this.title});
+
+  @override
+  State<MoviePage> createState() => _MoviePageState();
+}
+
+class _MoviePageState extends State<MoviePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     //print(
     //    "title: ${movie.title}\ntagline: ${movie.tagline}\ngenres: ${movie.genres}\nstatus: ${movie.status}\nrevenue: ${movie.revenue}\nbudget: ${movie.budget}\ncast: ${movie.cast}");
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            movie.title,
-            style: const TextStyle(color: AppColors.white, fontFamily: "REM"),
-          ),
+      appBar: AppBar(
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: AppColors.white, fontFamily: "REM"),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 202.7,
-              color: AppColors.primary,
-              child: Center(
-                child: Stack(
-                  alignment: Alignment.bottomLeft,
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: Image.network(
-                        movie.backdrop,
-                        width: 360,
-                        height: 202.7,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, bottom: 10),
-                      child: Container(
-                        width: 110,
-                        height: 165,
-                        decoration: const BoxDecoration(
-                          color: AppColors.terinary,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(0.2),
-                          child: ClipRRect(
+      ),
+      backgroundColor: AppColors.primary,
+      body: FutureBuilder<MovieModel>(
+          future: widget.movie,
+          builder: (context, snapshot) {
+            late Widget result;
+            if (snapshot.hasData) {
+              result = Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 202.7,
+                    color: AppColors.primary,
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          ClipRRect(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
+                                const BorderRadius.all(Radius.circular(5)),
                             child: Image.network(
-                              movie.poster,
-                              width: 110,
+                              snapshot.data!.backdrop,
+                              width: 360,
+                              height: 202.7,
                               loadingBuilder:
-                                  ((context, child, loadingProgress) {
+                                  (context, child, loadingProgress) {
                                 if (loadingProgress == null) {
                                   return child;
                                 } else {
                                   return const Center(
                                     child: CircularProgressIndicator(
-                                      color: AppColors.offWhite,
                                       strokeWidth: 1,
                                     ),
                                   );
                                 }
-                              }),
+                              },
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15, bottom: 10),
+                            child: Container(
+                              width: 110,
+                              height: 165,
+                              decoration: const BoxDecoration(
+                                color: AppColors.terinary,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(0.2),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  child: Image.network(
+                                    snapshot.data!.poster,
+                                    width: 110,
+                                    loadingBuilder:
+                                        ((context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppColors.offWhite,
+                                            strokeWidth: 1,
+                                          ),
+                                        );
+                                      }
+                                    }),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  color: AppColors.primary,
-                  width: double.infinity,
-                  height: 600,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
-                        child: Text(
-                          movie.title,
-                          style: const TextStyle(
-                              color: AppColors.offWhite,
-                              fontSize: 18,
-                              fontFamily: "REM",
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          left: 15,
-                          right: 15,
-                          top: 35,
-                        ),
-                        child: Text(
-                          "Overview",
-                          style: TextStyle(
-                              color: AppColors.offWhite,
-                              fontSize: 18,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15, top: 10, bottom: 15),
-                        child: Text(
-                          movie.overview,
-                          style: const TextStyle(
-                              color: AppColors.offWhite,
-                              fontSize: 14,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 290,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: ((context, index) {
-                            return actorCard(context, movie.cast[index]);
-                          }),
-                          separatorBuilder: ((context, index) =>
-                              const Divider()),
-                          itemCount: 10,
-                        ),
-                      ),
-                    ],
                   ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 15),
+                            child: Text(
+                              snapshot.data!.title,
+                              style: const TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 18,
+                                  fontFamily: "REM",
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              top: 35,
+                            ),
+                            child: Text(
+                              "Overview",
+                              style: TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 18,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 10, bottom: 15),
+                            child: Text(
+                              snapshot.data!.overview,
+                              style: const TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 14,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 290,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: ((context, index) {
+                                return actorCard(
+                                    context, snapshot.data!.cast[index]);
+                              }),
+                              separatorBuilder: ((context, index) =>
+                                  const Divider()),
+                              itemCount: snapshot.data!.cast.length,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              );
+            } else if (snapshot.hasError) {
+              result = Center(
+                  child: Text(
+                snapshot.error.toString(),
+                style: const TextStyle(color: AppColors.offWhite),
+              ));
+            } else {
+              result = const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.terinary,
+                  strokeWidth: 1,
                 ),
-              ),
-            )
-          ],
-        ));
+              );
+            }
+            return result;
+          }),
+    );
   }
 }
 
@@ -161,7 +196,7 @@ Widget actorCard(context, Map<String, dynamic> actor) {
   return GestureDetector(
     onTap: () {},
     child: Container(
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
       width: 120,
       decoration: const BoxDecoration(
           color: AppColors.transperantOffWhite,
