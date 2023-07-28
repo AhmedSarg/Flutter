@@ -6,16 +6,78 @@ class MovieService {
   String baseUrl = "https://api.themoviedb.org/3/movie/";
   String apiKey = "?api_key=044da023c2f912e4b5937f76528b4669";
 
-  Future<MovieModel> getMovie(int movieId) async {
+  Future<MovieModel> getMovieDetails(MovieModel movie) async {
     late Map result;
-    late MovieModel movieModel;
-    String url = baseUrl + movieId.toString() + apiKey;
+    String url = baseUrl + movie.id.toString() + apiKey;
+    String imgBaseUrl = "https://image.tmdb.org/t/p/w200";
+    String castEndpoint = "credits";
     final dio = Dio();
     await dio.get(url).then((value) {
       result = value.data;
     });
-    movieModel = MovieModel.fromJson(result);
-    return movieModel;
+    movie.tagline = result["tagline"];
+    result["genres"].forEach((genre) {
+      movie.genres.add(genre["name"]);
+    });
+    movie.status = result["status"];
+    int rev = result["revenue"];
+    int lenRev = rev.toString().length;
+    String sign = "";
+    if (lenRev <= 3) {
+      movie.revenue = rev.toString();
+    } else if (lenRev >= 4 && lenRev <= 6) {
+      sign = "K";
+      movie.revenue = double.parse((rev.toDouble() / 1000.0).toStringAsFixed(2))
+              .toString() +
+          sign;
+    } else if (lenRev >= 7 && lenRev <= 9) {
+      sign = "M";
+      movie.revenue =
+          double.parse((rev.toDouble() / 1000000.0).toStringAsFixed(2))
+                  .toString() +
+              sign;
+    } else {
+      sign = "B";
+      movie.revenue =
+          double.parse((rev.toDouble() / 1000000000.0).toStringAsFixed(2))
+                  .toString() +
+              sign;
+    }
+    int budget = result["budget"];
+    int lenBudg = budget.toString().length;
+    sign = "";
+    if (lenBudg <= 3) {
+      movie.budget = budget.toString();
+    } else if (lenBudg >= 4 && lenBudg <= 6) {
+      sign = "K";
+      movie.budget =
+          double.parse((budget.toDouble() / 1000.0).toStringAsFixed(2))
+                  .toString() +
+              sign;
+    } else if (lenBudg >= 7 && lenBudg <= 9) {
+      sign = "M";
+      movie.budget =
+          double.parse((budget.toDouble() / 1000000.0).toStringAsFixed(2))
+                  .toString() +
+              sign;
+    } else {
+      sign = "B";
+      movie.budget =
+          double.parse((budget.toDouble() / 1000000000.0).toStringAsFixed(2))
+                  .toString() +
+              sign;
+    }
+    url = baseUrl + movie.id.toString() + castEndpoint + apiKey;
+    late List<dynamic> cast;
+    await dio.get(url).then((value) {
+      cast = value.data["cast"];
+    });
+    cast.forEach((actor) {
+      movie.cast.add({"name": actor["name"]});
+      movie.cast.add({"character": actor["character"]});
+      movie.cast.add({"img": imgBaseUrl + actor["profile_path"]});
+    });
+    return movie;
   }
 
   Future<List<MovieModel>> getPopular() async {

@@ -161,7 +161,6 @@ Widget movieList(movies, title) {
                       strokeWidth: 1,
                     )),
                   );
-                  ;
                 },
               );
             }
@@ -250,7 +249,8 @@ Widget seriesList(series, title) {
 
 Widget movie(context, MovieModel movie) {
   return GestureDetector(
-    onTap: () {
+    onTap: () async {
+      movie = await MovieService().getMovieDetails(movie);
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => MoviePage(

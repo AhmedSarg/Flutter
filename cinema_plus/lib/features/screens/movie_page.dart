@@ -7,6 +7,9 @@ class MoviePage extends StatelessWidget {
   const MoviePage({super.key, required this.movie});
   @override
   Widget build(BuildContext context) {
+    //print(
+    //    "title: ${movie.title}\ntagline: ${movie.tagline}\ngenres: ${movie.genres}\nstatus: ${movie.status}\nrevenue: ${movie.revenue}\nbudget: ${movie.budget}");
+    print(movie.cast);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -132,16 +135,25 @@ class MoviePage extends StatelessWidget {
                               fontWeight: FontWeight.w900),
                         ),
                       ),
-                      ListView.separated(
+                      SizedBox(
+                        height: 120,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
                           itemBuilder: ((context, index) {
-                            return const SizedBox(
-                              width: 100,
-                              height: 100,
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 100,
+                                color: AppColors.terinary,
+                              ),
                             );
                           }),
                           separatorBuilder: ((context, index) =>
                               const Divider()),
-                          itemCount: 4),
+                          itemCount: 10,
+                        ),
+                      ),
                     ],
                   ),
                 ),
