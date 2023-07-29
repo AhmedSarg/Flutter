@@ -79,7 +79,7 @@ class MovieService {
           actor["character"] != null &&
           actor["profile_path"] != null) {
         ActorModel resActor = ActorModel.fromJson(actor);
-        resActor.character[movie.title] = actor["character"];
+        resActor.character = actor["character"];
         movie.cast.add(resActor);
       }
     });

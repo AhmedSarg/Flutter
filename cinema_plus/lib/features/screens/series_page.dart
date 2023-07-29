@@ -301,7 +301,7 @@ Widget actorCard(context, ActorModel actor, String title) {
               padding:
                   const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
               child: Text(
-                actor.character[title]!,
+                actor.character!,
                 softWrap: true,
                 style: const TextStyle(
                   fontFamily: "Montserrat",

@@ -52,7 +52,7 @@ class SeriesService {
           actor["character"] != null &&
           actor["profile_path"] != null) {
         ActorModel resActor = ActorModel.fromJson(actor);
-        resActor.character[serie.title] = actor["character"];
+        resActor.character = actor["character"];
         serie.cast.add(resActor);
       }
     });
