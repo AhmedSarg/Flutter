@@ -1,3 +1,5 @@
+import 'package:cinema_plus/features/model/actor_model.dart';
+
 class SeriesModel {
   final int id;
   final String title;
@@ -13,7 +15,7 @@ class SeriesModel {
   late String status;
   late List<Season> seasons = [];
   late int totalEpisodes;
-  late List<Map<String, dynamic>> cast = [];
+  late List<ActorModel> cast = [];
 
   SeriesModel({
     required this.id,
@@ -45,7 +47,7 @@ class SeriesModel {
 }
 
 class Season {
-  final String airDate;
+  final String? airDate;
   final int id;
   final String name;
   final String overview;

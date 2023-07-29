@@ -1,4 +1,4 @@
-import 'package:dartz/dartz_unsafe.dart';
+import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../features/model/series_model.dart';
@@ -46,16 +46,14 @@ class SeriesService {
     await dio.get(url).then((value) {
       cast = value.data["cast"];
     });
+    serie.cast.clear();
     cast.forEach((actor) {
       if (actor["name"] != null &&
           actor["character"] != null &&
           actor["profile_path"] != null) {
-        serie.cast.add({
-          "id": actor["id"],
-          "name": actor["name"],
-          "character": actor["character"],
-          "img": imgBaseUrl + actor["profile_path"],
-        });
+        ActorModel resActor = ActorModel.fromJson(actor);
+        resActor.character[serie.title] = actor["character"];
+        serie.cast.add(resActor);
       }
     });
     return serie;
