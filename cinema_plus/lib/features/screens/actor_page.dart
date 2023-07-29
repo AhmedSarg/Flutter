@@ -1,5 +1,9 @@
+import 'package:cinema_plus/core/services/movie_service.dart';
+import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
+import 'package:cinema_plus/features/screens/movie_page.dart';
+import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -227,9 +231,18 @@ class _ActorPageState extends State<ActorPage> {
 
 Widget movieCard(context, Map<String, dynamic> movie) {
   return GestureDetector(
-    onTap: () {},
+    onTap: () async {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: ((context) => MoviePage(
+                movie: MovieService().getMovieDetails(movie["id"]),
+                title: movie["title"],
+              )),
+        ),
+      );
+    },
     child: Container(
-      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      margin: const EdgeInsets.only(left: 20, right: 10, top: 20, bottom: 20),
       width: 120,
       decoration: const BoxDecoration(
           color: AppColors.transperantOffWhite,
@@ -270,8 +283,11 @@ Widget movieCard(context, Map<String, dynamic> movie) {
                       );
                     }
                   },
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.warning)),
+                  errorBuilder: (context, error, stackTrace) => const Center(
+                      child: Icon(
+                    Icons.warning,
+                    color: AppColors.terinary,
+                  )),
                 ),
               ),
             ),
@@ -313,9 +329,18 @@ Widget movieCard(context, Map<String, dynamic> movie) {
 
 Widget serieCard(context, Map<String, dynamic> serie) {
   return GestureDetector(
-    onTap: () {},
+    onTap: () async {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: ((context) => SeriesPage(
+                serie: SeriesService().getSeriesDetails(serie["id"]),
+                title: serie["title"],
+              )),
+        ),
+      );
+    },
     child: Container(
-      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      margin: const EdgeInsets.only(left: 20, right: 10, top: 20, bottom: 20),
       width: 120,
       decoration: const BoxDecoration(
           color: AppColors.transperantOffWhite,
@@ -356,8 +381,11 @@ Widget serieCard(context, Map<String, dynamic> serie) {
                       );
                     }
                   },
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.warning)),
+                  errorBuilder: (context, error, stackTrace) => const Center(
+                      child: Icon(
+                    Icons.warning,
+                    color: AppColors.terinary,
+                  )),
                 ),
               ),
             ),

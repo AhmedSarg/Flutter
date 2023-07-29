@@ -252,7 +252,7 @@ Widget movie(context, MovieModel movie) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => MoviePage(
-                movie: MovieService().getMovieDetails(movie),
+                movie: MovieService().getMovieDetails(movie.id),
                 title: movie.title,
               )),
         ),
@@ -310,7 +310,11 @@ Widget movie(context, MovieModel movie) {
                         }
                       },
                       errorBuilder: (context, error, stackTrace) =>
-                          const Center(child: Icon(Icons.warning)),
+                          const Center(
+                              child: Icon(
+                        Icons.warning,
+                        color: AppColors.terinary,
+                      )),
                     ),
                   ),
                 ),
@@ -376,7 +380,7 @@ Widget serie(context, SeriesModel serie) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => SeriesPage(
-                serie: SeriesService().getSeriesDetails(serie),
+                serie: SeriesService().getSeriesDetails(serie.id),
                 title: serie.title,
               )),
         ),
@@ -434,7 +438,11 @@ Widget serie(context, SeriesModel serie) {
                         }
                       },
                       errorBuilder: (context, error, stackTrace) =>
-                          const Center(child: Icon(Icons.warning)),
+                          const Center(
+                              child: Icon(
+                        Icons.warning,
+                        color: AppColors.terinary,
+                      )),
                     ),
                   ),
                 ),

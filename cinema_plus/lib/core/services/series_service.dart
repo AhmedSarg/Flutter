@@ -7,16 +7,18 @@ class SeriesService {
   String baseUrl = "https://api.themoviedb.org/3/";
   String apiKey = "?api_key=044da023c2f912e4b5937f76528b4669";
 
-  Future<SeriesModel> getSeriesDetails(SeriesModel serie) async {
+  Future<SeriesModel> getSeriesDetails(int serieId) async {
     late Map result;
     String imgBaseUrl = "https://image.tmdb.org/t/p/w200";
     String castEndpoint = "/credits";
     String seriesEndpoint = "tv/";
-    String url = baseUrl + seriesEndpoint + serie.id.toString() + apiKey;
+    String url = baseUrl + seriesEndpoint + serieId.toString() + apiKey;
+    late SeriesModel serie;
     final dio = Dio();
     await dio.get(url).then((value) {
       result = value.data;
     });
+    serie = SeriesModel.fromJson(result);
     serie.tagline = result["tagline"];
     result["genres"].forEach((genre) {
       serie.genres.add(genre["name"]);

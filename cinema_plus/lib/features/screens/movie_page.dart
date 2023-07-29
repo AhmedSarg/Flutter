@@ -219,7 +219,7 @@ Widget actorCard(context, ActorModel actor, String title) {
       );
     },
     child: Container(
-      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      margin: const EdgeInsets.only(left: 20, right: 10, top: 20, bottom: 20),
       width: 120,
       decoration: const BoxDecoration(
           color: AppColors.transperantOffWhite,
@@ -260,8 +260,11 @@ Widget actorCard(context, ActorModel actor, String title) {
                       );
                     }
                   },
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.warning)),
+                  errorBuilder: (context, error, stackTrace) => const Center(
+                      child: Icon(
+                    Icons.warning,
+                    color: AppColors.terinary,
+                  )),
                 ),
               ),
             ),

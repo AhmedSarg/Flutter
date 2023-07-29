@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 
 import '../../features/model/actor_model.dart';
@@ -36,6 +38,7 @@ class ActorService {
         if (element["media_type"] == "movie") {
           actor.movies.add(
             {
+              "id": element["id"],
               "poster": imgBaseUrl + element["poster_path"],
               "title": element["title"],
               "character": element["character"],
@@ -46,6 +49,7 @@ class ActorService {
         } else if (element["media_type"] == "tv") {
           actor.series.add(
             {
+              "id": element["id"],
               "poster": imgBaseUrl + element["poster_path"],
               "title": element["name"],
               "character": element["character"],
