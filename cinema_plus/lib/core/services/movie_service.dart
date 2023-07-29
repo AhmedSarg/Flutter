@@ -1,3 +1,4 @@
+import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../features/model/movie_model.dart';
@@ -72,16 +73,14 @@ class MovieService {
     await dio.get(url).then((value) {
       cast = value.data["cast"];
     });
+    movie.cast.clear();
     cast.forEach((actor) {
       if (actor["name"] != null &&
           actor["character"] != null &&
           actor["profile_path"] != null) {
-        movie.cast.add({
-          "id": actor["id"],
-          "name": actor["name"],
-          "character": actor["character"],
-          "img": imgBaseUrl + actor["profile_path"],
-        });
+        ActorModel resActor = ActorModel.fromJson(actor);
+        resActor.character[movie.title] = actor["character"];
+        movie.cast.add(resActor);
       }
     });
     return movie;

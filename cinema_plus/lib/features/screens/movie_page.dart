@@ -1,4 +1,5 @@
 import 'package:cinema_plus/core/utils/app_colors.dart';
+import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:flutter/material.dart';
 
@@ -154,7 +155,10 @@ class _MoviePageState extends State<MoviePage> {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: ((context, index) {
                                 return actorCard(
-                                    context, snapshot.data!.cast[index]);
+                                  context,
+                                  snapshot.data!.cast[index],
+                                  widget.title,
+                                );
                               }),
                               separatorBuilder: ((context, index) =>
                                   const Divider()),
@@ -187,7 +191,7 @@ class _MoviePageState extends State<MoviePage> {
   }
 }
 
-Widget actorCard(context, Map<String, dynamic> actor) {
+Widget actorCard(context, ActorModel actor, String title) {
   return GestureDetector(
     onTap: () {},
     child: Container(
@@ -219,7 +223,7 @@ Widget actorCard(context, Map<String, dynamic> actor) {
                   topRight: Radius.circular(20),
                 ),
                 child: Image.network(
-                  actor["img"]!,
+                  actor.img!,
                   width: 400,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) {
@@ -241,7 +245,7 @@ Widget actorCard(context, Map<String, dynamic> actor) {
           Padding(
             padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
             child: Text(
-              actor["name"]!,
+              actor.name!,
               softWrap: true,
               style: const TextStyle(
                 fontFamily: "REM",
@@ -256,7 +260,7 @@ Widget actorCard(context, Map<String, dynamic> actor) {
               padding:
                   const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
               child: Text(
-                actor["character"]!,
+                actor.character[title]!,
                 softWrap: true,
                 style: const TextStyle(
                   fontFamily: "Montserrat",

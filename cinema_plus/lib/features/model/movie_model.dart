@@ -1,3 +1,5 @@
+import 'package:cinema_plus/features/model/actor_model.dart';
+
 class MovieModel {
   final int id;
   final String title;
@@ -13,7 +15,7 @@ class MovieModel {
   late String status;
   late String revenue;
   late String budget;
-  late List<Map<String, dynamic>> cast = [];
+  late List<ActorModel> cast = [];
 
   MovieModel({
     required this.id,

@@ -165,8 +165,11 @@ class _SeriesPageState extends State<SeriesPage> {
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: ((context, index) {
-                              return actorCard(context,
-                                  snapshot.data!.cast[index], widget.title);
+                              return actorCard(
+                                context,
+                                snapshot.data!.cast[index],
+                                widget.title,
+                              );
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
