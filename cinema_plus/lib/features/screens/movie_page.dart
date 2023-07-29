@@ -15,8 +15,6 @@ class MoviePage extends StatefulWidget {
 class _MoviePageState extends State<MoviePage> {
   @override
   Widget build(BuildContext context) {
-    //print(
-    //    "title: ${movie.title}\ntagline: ${movie.tagline}\ngenres: ${movie.genres}\nstatus: ${movie.status}\nrevenue: ${movie.revenue}\nbudget: ${movie.budget}\ncast: ${movie.cast}");
     return Scaffold(
       appBar: AppBar(
         title: Text(
