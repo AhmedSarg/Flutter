@@ -29,27 +29,43 @@ class ActorService {
     await dio.get(url).then((value) {
       credits = value.data["cast"];
     });
-    actor.credits.clear();
+    actor.movies.clear();
+    actor.series.clear();
     credits.forEach((element) {
       if (element["poster_path"] != null) {
-        String title;
-        if (element["title"] == null) {
-          title = "name";
-        } else {
-          title = "title";
+        if (element["media_type"] == "movie") {
+          actor.movies.add(
+            {
+              "poster": imgBaseUrl + element["poster_path"],
+              "title": element["title"],
+              "character": element["character"],
+              "popularity": element["popularity"],
+              "type": element["media_type"],
+            },
+          );
+        } else if (element["media_type"] == "tv") {
+          actor.series.add(
+            {
+              "poster": imgBaseUrl + element["poster_path"],
+              "title": element["name"],
+              "character": element["character"],
+              "popularity": element["popularity"],
+              "type": element["media_type"],
+            },
+          );
         }
-        actor.credits.add({
-          "poster": imgBaseUrl + element["poster_path"],
-          "title": element[title],
-          "character": element["character"],
-          "popularity": element["popularity"],
-          "type": element["media_type"],
-        });
       }
     });
-    actor.credits.sort(((a, b) {
-      return b["popularity"].compareTo(a["popularity"]);
-    }));
+    actor.movies.sort(
+      ((a, b) {
+        return b["popularity"].compareTo(a["popularity"]);
+      }),
+    );
+    actor.series.sort(
+      ((a, b) {
+        return b["popularity"].compareTo(a["popularity"]);
+      }),
+    );
     return actor;
   }
 }

@@ -1,6 +1,8 @@
+import 'package:cinema_plus/core/services/actor_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/model/series_model.dart';
+import 'package:cinema_plus/features/screens/actor_page.dart';
 import 'package:flutter/material.dart';
 
 class SeriesPage extends StatefulWidget {
@@ -234,7 +236,16 @@ class _SeriesPageState extends State<SeriesPage> {
 
 Widget actorCard(context, ActorModel actor, String title) {
   return GestureDetector(
-    onTap: () {},
+    onTap: () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: ((context) => ActorPage(
+                actor: ActorService().getActorDetails(actor),
+                name: actor.name!,
+              )),
+        ),
+      );
+    },
     child: Container(
       margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
       width: 120,

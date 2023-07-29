@@ -1,24 +1,31 @@
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ActorPage extends StatelessWidget {
+class ActorPage extends StatefulWidget {
   final Future<ActorModel> actor;
   final String name;
   const ActorPage({super.key, required this.actor, required this.name});
 
   @override
+  State<ActorPage> createState() => _ActorPageState();
+}
+
+class _ActorPageState extends State<ActorPage> {
+  bool extendBio = false;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          name,
+          widget.name,
           style: const TextStyle(color: AppColors.white, fontFamily: "REM"),
         ),
       ),
       backgroundColor: AppColors.primary,
       body: FutureBuilder<ActorModel>(
-          future: actor,
+          future: widget.actor,
           builder: (context, snapshot) {
             Widget result;
             if (snapshot.hasData) {
@@ -100,39 +107,98 @@ class ActorPage extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 10, bottom: 15),
-                            child: Container(
-                              height: 100,
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Text(
-                                    actorDetails.bio!,
-                                    style: const TextStyle(
+                              top: 10,
+                              bottom: 15,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                  ),
+                                  child: SizedBox(
+                                    height: extendBio ? null : 100,
+                                    child: Text(
+                                      actorDetails.bio!,
+                                      style: const TextStyle(
+                                          color: AppColors.offWhite,
+                                          fontSize: 14,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w900),
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        extendBio = !extendBio;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      extendBio
+                                          ? FontAwesomeIcons.angleUp
+                                          : FontAwesomeIcons.angleDown,
+                                      color: AppColors.offWhite,
+                                    ),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 35, left: 20),
+                                  child: Text(
+                                    "Movies",
+                                    style: TextStyle(
                                         color: AppColors.offWhite,
-                                        fontSize: 14,
+                                        fontSize: 18,
                                         fontFamily: "Montserrat",
                                         fontWeight: FontWeight.w900),
                                   ),
-                                  Container(
-                                    height: 30,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
+                                ),
+                                SizedBox(
+                                  height: 290,
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: ((context, index) {
+                                      return movieCard(
+                                        context,
+                                        actorDetails.movies[index],
+                                      );
+                                    }),
+                                    separatorBuilder: ((context, index) =>
+                                        const Divider()),
+                                    itemCount: actorDetails.movies.length,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 35, left: 20),
+                                  child: Text(
+                                    "Series",
+                                    style: TextStyle(
                                         color: AppColors.offWhite,
-                                        width: 0.2,
-                                      ),
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.arrow_downward,
-                                        color: AppColors.offWhite,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                        fontSize: 18,
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 290,
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: ((context, index) {
+                                      return serieCard(
+                                        context,
+                                        actorDetails.series[index],
+                                      );
+                                    }),
+                                    separatorBuilder: ((context, index) =>
+                                        const Divider()),
+                                    itemCount: actorDetails.series.length,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -157,4 +223,176 @@ class ActorPage extends StatelessWidget {
           }),
     );
   }
+}
+
+Widget movieCard(context, Map<String, dynamic> movie) {
+  return GestureDetector(
+    onTap: () {},
+    child: Container(
+      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      width: 120,
+      decoration: const BoxDecoration(
+          color: AppColors.transperantOffWhite,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: Container(
+              height: 180,
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              )),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                child: Image.network(
+                  movie["poster"],
+                  width: 400,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.warning)),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
+            child: Text(
+              movie["title"],
+              softWrap: true,
+              style: const TextStyle(
+                fontFamily: "REM",
+                fontSize: 12,
+                color: AppColors.offWhite,
+                fontWeight: FontWeight.w100,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+              child: Text(
+                movie["character"],
+                softWrap: true,
+                style: const TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: 10,
+                  color: AppColors.offWhite,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget serieCard(context, Map<String, dynamic> serie) {
+  return GestureDetector(
+    onTap: () {},
+    child: Container(
+      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      width: 120,
+      decoration: const BoxDecoration(
+          color: AppColors.transperantOffWhite,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: Container(
+              height: 180,
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              )),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                child: Image.network(
+                  serie["poster"],
+                  width: 400,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.warning)),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
+            child: Text(
+              serie["title"],
+              softWrap: true,
+              style: const TextStyle(
+                fontFamily: "REM",
+                fontSize: 12,
+                color: AppColors.offWhite,
+                fontWeight: FontWeight.w100,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+              child: Text(
+                serie["character"],
+                softWrap: true,
+                style: const TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: 10,
+                  color: AppColors.offWhite,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

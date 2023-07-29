@@ -7,7 +7,8 @@ class ActorModel {
   late String? birthday;
   late String? deathday;
   late String? placeofBirth;
-  late List<Map<String, dynamic>> credits = [];
+  late List<Map<String, dynamic>> movies = [];
+  late List<Map<String, dynamic>> series = [];
 
   ActorModel({
     required this.id,
