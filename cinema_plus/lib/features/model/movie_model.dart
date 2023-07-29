@@ -39,7 +39,7 @@ class MovieModel {
       releaseDate: jsonData["release_date"],
       language: jsonData["original_language"],
       overview: jsonData["overview"],
-      rating: double.parse((jsonData["vote_average"]).toStringAsFixed(2)),
+      rating: double.parse((jsonData["vote_average"]).toStringAsFixed(1)),
       totalVotes: jsonData["vote_count"],
       backdrop: baseOrgPosterUrl + jsonData["backdrop_path"],
     );

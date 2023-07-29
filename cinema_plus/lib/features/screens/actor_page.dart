@@ -292,16 +292,18 @@ Widget movieCard(context, Map<String, dynamic> movie) {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
-            child: Text(
-              movie["title"],
-              softWrap: true,
-              style: const TextStyle(
-                fontFamily: "REM",
-                fontSize: 12,
-                color: AppColors.offWhite,
-                fontWeight: FontWeight.w100,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
+              child: Text(
+                movie["title"],
+                softWrap: true,
+                style: const TextStyle(
+                  fontFamily: "REM",
+                  fontSize: 12,
+                  color: AppColors.offWhite,
+                  fontWeight: FontWeight.w100,
+                ),
               ),
             ),
           ),
@@ -390,16 +392,18 @@ Widget serieCard(context, Map<String, dynamic> serie) {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
-            child: Text(
-              serie["title"],
-              softWrap: true,
-              style: const TextStyle(
-                fontFamily: "REM",
-                fontSize: 12,
-                color: AppColors.offWhite,
-                fontWeight: FontWeight.w100,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
+              child: Text(
+                serie["title"],
+                softWrap: true,
+                style: const TextStyle(
+                  fontFamily: "REM",
+                  fontSize: 12,
+                  color: AppColors.offWhite,
+                  fontWeight: FontWeight.w100,
+                ),
               ),
             ),
           ),

@@ -30,6 +30,7 @@ class _MoviePageState extends State<MoviePage> {
           builder: (context, snapshot) {
             late Widget result;
             if (snapshot.hasData) {
+              MovieModel movie = snapshot.data!;
               result = Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -110,14 +111,30 @@ class _MoviePageState extends State<MoviePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              top: 15,
+                              bottom: 5,
+                            ),
                             child: Text(
-                              snapshot.data!.title,
+                              movie.title,
                               style: const TextStyle(
                                   color: AppColors.offWhite,
                                   fontSize: 18,
                                   fontFamily: "REM",
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            child: Text(
+                              movie.tagline,
+                              style: const TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 10,
+                                  fontFamily: "Montserrat",
                                   fontWeight: FontWeight.w900),
                             ),
                           ),
@@ -140,12 +157,71 @@ class _MoviePageState extends State<MoviePage> {
                             padding: const EdgeInsets.only(
                                 left: 15, right: 15, top: 10, bottom: 15),
                             child: Text(
-                              snapshot.data!.overview,
+                              movie.overview,
                               style: const TextStyle(
                                   color: AppColors.offWhite,
                                   fontSize: 14,
                                   fontFamily: "Montserrat",
                                   fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              top: 35,
+                            ),
+                            child: Text(
+                              "Rating",
+                              style: TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 18,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 10, bottom: 15),
+                            child: Row(
+                              children: [
+                                Text(
+                                  movie.rating.toString(),
+                                  style: const TextStyle(
+                                    color: AppColors.terinary,
+                                    fontSize: 20,
+                                    fontFamily: "REM",
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Text(
+                                  " of total ",
+                                  style: TextStyle(
+                                    color: AppColors.offWhite,
+                                    fontSize: 18,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                Text(
+                                  movie.totalVotes.toString(),
+                                  style: const TextStyle(
+                                    color: AppColors.terinary,
+                                    fontSize: 20,
+                                    fontFamily: "REM",
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Text(
+                                  " Votes",
+                                  style: TextStyle(
+                                    color: AppColors.offWhite,
+                                    fontSize: 18,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const Padding(
@@ -171,13 +247,13 @@ class _MoviePageState extends State<MoviePage> {
                               itemBuilder: ((context, index) {
                                 return actorCard(
                                   context,
-                                  snapshot.data!.cast[index],
+                                  movie.cast[index],
                                   widget.title,
                                 );
                               }),
                               separatorBuilder: ((context, index) =>
                                   const Divider()),
-                              itemCount: snapshot.data!.cast.length,
+                              itemCount: movie.cast.length,
                             ),
                           ),
                         ],

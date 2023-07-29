@@ -30,6 +30,7 @@ class _SeriesPageState extends State<SeriesPage> {
         builder: (context, snapshot) {
           late Widget result;
           if (snapshot.hasData) {
+            SeriesModel serie = snapshot.data!;
             result = Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -45,7 +46,7 @@ class _SeriesPageState extends State<SeriesPage> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
                           child: Image.network(
-                            snapshot.data!.backdrop,
+                            serie.backdrop,
                             width: 360,
                             height: 202.7,
                             loadingBuilder: (context, child, loadingProgress) {
@@ -77,7 +78,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(10)),
                                 child: Image.network(
-                                  snapshot.data!.poster,
+                                  serie.poster,
                                   width: 110,
                                   loadingBuilder:
                                       ((context, child, loadingProgress) {
@@ -108,14 +109,30 @@ class _SeriesPageState extends State<SeriesPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
+                          padding: const EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 15,
+                            bottom: 5,
+                          ),
                           child: Text(
-                            snapshot.data!.title,
+                            serie.title,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 18,
                                 fontFamily: "REM",
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          child: Text(
+                            serie.tagline,
+                            style: const TextStyle(
+                                color: AppColors.offWhite,
+                                fontSize: 10,
+                                fontFamily: "Montserrat",
                                 fontWeight: FontWeight.w900),
                           ),
                         ),
@@ -138,12 +155,56 @@ class _SeriesPageState extends State<SeriesPage> {
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, top: 10, bottom: 15),
                           child: Text(
-                            snapshot.data!.overview,
+                            serie.overview,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 14,
                                 fontFamily: "Montserrat",
                                 fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 10, bottom: 15),
+                          child: Row(
+                            children: [
+                              Text(
+                                serie.rating.toString(),
+                                style: const TextStyle(
+                                  color: AppColors.terinary,
+                                  fontSize: 20,
+                                  fontFamily: "REM",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const Text(
+                                " of total ",
+                                style: TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 18,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              Text(
+                                serie.totalVotes.toString(),
+                                style: const TextStyle(
+                                  color: AppColors.terinary,
+                                  fontSize: 20,
+                                  fontFamily: "REM",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const Text(
+                                " Votes",
+                                style: TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 18,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const Padding(
@@ -169,13 +230,13 @@ class _SeriesPageState extends State<SeriesPage> {
                             itemBuilder: ((context, index) {
                               return actorCard(
                                 context,
-                                snapshot.data!.cast[index],
+                                serie.cast[index],
                                 widget.title,
                               );
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
-                            itemCount: snapshot.data!.cast.length,
+                            itemCount: serie.cast.length,
                           ),
                         ),
                         const Padding(
@@ -199,12 +260,11 @@ class _SeriesPageState extends State<SeriesPage> {
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: ((context, index) {
-                              return seasonCard(
-                                  context, snapshot.data!.seasons[index]);
+                              return seasonCard(context, serie.seasons[index]);
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
-                            itemCount: snapshot.data!.seasons.length,
+                            itemCount: serie.seasons.length,
                           ),
                         ),
                       ],
