@@ -11,7 +11,7 @@ class SeriesModel {
   late String tagline;
   late List<String> genres = [];
   late String status;
-  late List<Map<String, dynamic>> seasons = [];
+  late List<Season> seasons = [];
   late int totalEpisodes;
   late List<Map<String, dynamic>> cast = [];
 
@@ -42,4 +42,49 @@ class SeriesModel {
       backdrop: baseOrgPosterUrl + jsonData["backdrop_path"],
     );
   }
+}
+
+class Season {
+  final String airDate;
+  final int id;
+  final String name;
+  final String overview;
+  final String poster;
+  final int number;
+  final double rating;
+  final int episodeCount;
+  late List<Episode> episodes;
+
+  Season({
+    required this.airDate,
+    required this.id,
+    required this.name,
+    required this.overview,
+    required this.poster,
+    required this.number,
+    required this.rating,
+    required this.episodeCount,
+  });
+}
+
+class Episode {
+  final int number;
+  final String airDate;
+  final String name;
+  final String overview;
+  final int id;
+  final int time;
+  final String cover;
+  final double rating;
+
+  Episode({
+    required this.number,
+    required this.airDate,
+    required this.name,
+    required this.overview,
+    required this.id,
+    required this.time,
+    required this.cover,
+    required this.rating,
+  });
 }

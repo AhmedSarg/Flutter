@@ -143,6 +143,21 @@ class _SeriesPageState extends State<SeriesPage> {
                                 fontWeight: FontWeight.w900),
                           ),
                         ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 35,
+                          ),
+                          child: Text(
+                            "Cast",
+                            style: TextStyle(
+                                color: AppColors.offWhite,
+                                fontSize: 18,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ),
                         SizedBox(
                           height: 290,
                           child: ListView.separated(
@@ -155,6 +170,35 @@ class _SeriesPageState extends State<SeriesPage> {
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
                             itemCount: snapshot.data!.cast.length,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 35,
+                          ),
+                          child: Text(
+                            "Seasons",
+                            style: TextStyle(
+                                color: AppColors.offWhite,
+                                fontSize: 18,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 290,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: ((context, index) {
+                              return seasonCard(
+                                  context, snapshot.data!.seasons[index]);
+                            }),
+                            separatorBuilder: ((context, index) =>
+                                const Divider()),
+                            itemCount: snapshot.data!.seasons.length,
                           ),
                         ),
                       ],
@@ -254,6 +298,93 @@ Widget actorCard(context, Map<String, dynamic> actor) {
                   const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
               child: Text(
                 actor["character"]!,
+                softWrap: true,
+                style: const TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: 10,
+                  color: AppColors.offWhite,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget seasonCard(context, Season season) {
+  String ep = " Episodes";
+  return GestureDetector(
+    onTap: () {},
+    child: Container(
+      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      width: 120,
+      decoration: const BoxDecoration(
+          color: AppColors.transperantOffWhite,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: Container(
+              height: 180,
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              )),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                child: Image.network(
+                  season.poster,
+                  width: 400,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.warning)),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 2, right: 5, left: 5),
+            child: Text(
+              season.name,
+              softWrap: true,
+              style: const TextStyle(
+                fontFamily: "REM",
+                fontSize: 12,
+                color: AppColors.offWhite,
+                fontWeight: FontWeight.w100,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+              child: Text(
+                season.episodeCount.toString() + ep,
                 softWrap: true,
                 style: const TextStyle(
                   fontFamily: "Montserrat",

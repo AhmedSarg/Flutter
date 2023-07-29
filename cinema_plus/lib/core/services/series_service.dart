@@ -22,14 +22,26 @@ class SeriesService {
       serie.genres.add(genre["name"]);
     });
     serie.status = result["status"];
-    url =
-        baseUrl + seriesEndpoint + serie.id.toString() + castEndpoint + apiKey;
+    serie.seasons.clear();
     result["seasons"].forEach((season) {
       if (season["season_number"] > 0) {
-        serie.seasons.add(season);
+        serie.seasons.add(
+          Season(
+            airDate: season["air_date"],
+            id: season["id"],
+            name: season["name"],
+            overview: season["overview"],
+            poster: imgBaseUrl + season["poster_path"],
+            number: season["season_number"],
+            rating: season["vote_average"],
+            episodeCount: season["episode_count"],
+          ),
+        );
       }
     });
     serie.totalEpisodes = result["number_of_episodes"];
+    url =
+        baseUrl + seriesEndpoint + serie.id.toString() + castEndpoint + apiKey;
     late List<dynamic> cast;
     await dio.get(url).then((value) {
       cast = value.data["cast"];
