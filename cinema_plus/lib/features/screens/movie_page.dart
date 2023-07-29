@@ -148,6 +148,21 @@ class _MoviePageState extends State<MoviePage> {
                                   fontWeight: FontWeight.w900),
                             ),
                           ),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              top: 35,
+                            ),
+                            child: Text(
+                              "Cast",
+                              style: TextStyle(
+                                  color: AppColors.offWhite,
+                                  fontSize: 18,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
                           SizedBox(
                             height: 290,
                             child: ListView.separated(
