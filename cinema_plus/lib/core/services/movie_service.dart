@@ -4,14 +4,15 @@ import 'package:dio/dio.dart';
 import '../../features/model/movie_model.dart';
 
 class MovieService {
-  String baseUrl = "https://api.themoviedb.org/3/movie/";
+  String baseUrl = "https://api.themoviedb.org/3/";
   String apiKey = "?api_key=044da023c2f912e4b5937f76528b4669";
 
   Future<MovieModel> getMovieDetails(int movieId) async {
     late Map result;
-    String url = baseUrl + movieId.toString() + apiKey;
     String imgBaseUrl = "https://image.tmdb.org/t/p/w200";
+    String movieEndpoint = "movie/";
     String castEndpoint = "/credits";
+    String url = baseUrl + movieEndpoint + movieId.toString() + apiKey;
     late MovieModel movie;
     final dio = Dio();
     await dio.get(url).then((value) {
@@ -68,7 +69,7 @@ class MovieService {
                   .toString() +
               sign;
     }
-    url = baseUrl + movie.id.toString() + castEndpoint + apiKey;
+    url = baseUrl + movieEndpoint + movie.id.toString() + castEndpoint + apiKey;
     late List<dynamic> cast;
     await dio.get(url).then((value) {
       cast = value.data["cast"];
@@ -86,9 +87,29 @@ class MovieService {
     return movie;
   }
 
+  Future<List<MovieModel>> getGenreMovies(int genreId) async {
+    String genreEndpoint = "discover/movie";
+    String query = "&with_genres=$genreId";
+    String url = baseUrl + genreEndpoint + apiKey + query;
+    late List<dynamic> result;
+    late List<MovieModel> genreMovies = [];
+    final dio = Dio();
+    await dio.get(url).then((value) {
+      result = value.data["results"];
+    });
+    result.forEach((movie) {
+      genreMovies.add(MovieModel.fromJson(movie));
+    });
+    genreMovies.sort(((a, b) {
+      return b.rating.compareTo(a.rating);
+    }));
+    return genreMovies;
+  }
+
   Future<List<MovieModel>> getPopular() async {
     String endpoint = "popular";
-    String url = baseUrl + endpoint + apiKey;
+    String movieEndpoint = "movie/";
+    String url = baseUrl + movieEndpoint + endpoint + apiKey;
     late List<dynamic> result;
     late List<MovieModel> popularMovies = [];
     final dio = Dio();
@@ -116,7 +137,8 @@ class MovieService {
 
   Future<List<MovieModel>> getTopRated() async {
     String endpoint = "top_rated";
-    String url = baseUrl + endpoint + apiKey;
+    String movieEndpoint = "movie/";
+    String url = baseUrl + movieEndpoint + endpoint + apiKey;
     late List<dynamic> result;
     late List<MovieModel> topRatedMovies = [];
     final dio = Dio();

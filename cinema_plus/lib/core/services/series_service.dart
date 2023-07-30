@@ -59,6 +59,25 @@ class SeriesService {
     return serie;
   }
 
+  Future<List<SeriesModel>> getGenreSeries(int genreId) async {
+    String genreEndpoint = "discover/tv";
+    String query = "&with_genres=$genreId";
+    String url = baseUrl + genreEndpoint + apiKey + query;
+    late List<dynamic> result;
+    late List<SeriesModel> genreSeries = [];
+    final dio = Dio();
+    await dio.get(url).then((value) {
+      result = value.data["results"];
+    });
+    result.forEach((serie) {
+      genreSeries.add(SeriesModel.fromJson(serie));
+    });
+    genreSeries.sort(((a, b) {
+      return b.rating.compareTo(a.rating);
+    }));
+    return genreSeries;
+  }
+
   Future<List<SeriesModel>> getPopular() async {
     String endpoint = "discover/tv";
     String query =

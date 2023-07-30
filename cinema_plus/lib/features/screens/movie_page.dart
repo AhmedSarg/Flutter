@@ -1,8 +1,11 @@
 import 'package:cinema_plus/core/services/actor_service.dart';
+import 'package:cinema_plus/core/services/movie_service.dart';
+import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:cinema_plus/features/screens/actor_page.dart';
+import 'package:cinema_plus/features/screens/genre_page.dart';
 import 'package:flutter/material.dart';
 
 class MoviePage extends StatefulWidget {
@@ -256,7 +259,24 @@ class _MoviePageState extends State<MoviePage> {
                                     horizontal: 5,
                                   ),
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: ((context) => GenrePage(
+                                                movies: MovieService()
+                                                    .getGenreMovies(
+                                                  movie.genres[index]["id"],
+                                                ),
+                                                series: SeriesService()
+                                                    .getGenreSeries(
+                                                  movie.genres[index]["id"],
+                                                ),
+                                                title: movie.genres[index]
+                                                    ["name"],
+                                              )),
+                                        ),
+                                      );
+                                    },
                                     child: Text(
                                       movie.genres[index]["name"],
                                       style: const TextStyle(
