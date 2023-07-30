@@ -19,9 +19,7 @@ class MovieService {
     });
     movie = MovieModel.fromJson(result);
     movie.tagline = result["tagline"];
-    result["genres"].forEach((genre) {
-      movie.genres.add(genre["name"]);
-    });
+    movie.genres = result["genres"];
     movie.status = result["status"];
     int rev = result["revenue"];
     int lenRev = rev.toString().length;

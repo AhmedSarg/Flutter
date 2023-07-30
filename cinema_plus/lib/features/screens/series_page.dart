@@ -163,6 +163,21 @@ class _SeriesPageState extends State<SeriesPage> {
                                 fontWeight: FontWeight.w900),
                           ),
                         ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 35,
+                          ),
+                          child: Text(
+                            "Rating",
+                            style: TextStyle(
+                                color: AppColors.offWhite,
+                                fontSize: 18,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, top: 10, bottom: 15),
@@ -202,6 +217,156 @@ class _SeriesPageState extends State<SeriesPage> {
                                   fontSize: 18,
                                   fontFamily: "Montserrat",
                                   fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 35,
+                          ),
+                          child: Text(
+                            "Genres",
+                            style: TextStyle(
+                              color: AppColors.offWhite,
+                              fontSize: 18,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 10,
+                          ),
+                          height: 50,
+                          width: double.infinity,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: ((context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    serie.genres[index]["name"],
+                                    style: const TextStyle(
+                                      color: AppColors.offWhite,
+                                      fontSize: 10,
+                                      fontFamily: "REM",
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                            separatorBuilder: ((context, index) {
+                              return const Divider();
+                            }),
+                            itemCount: serie.genres.length,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 35,
+                          ),
+                          child: Text(
+                            "Details",
+                            style: TextStyle(
+                                color: AppColors.offWhite,
+                                fontSize: 18,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 10, bottom: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      "Status :  ",
+                                      style: TextStyle(
+                                        color: AppColors.offWhite,
+                                        fontSize: 14,
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Text(
+                                      serie.status,
+                                      style: const TextStyle(
+                                        color: AppColors.terinary,
+                                        fontSize: 16,
+                                        fontFamily: "REM",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      "Release Date :  ",
+                                      style: TextStyle(
+                                        color: AppColors.offWhite,
+                                        fontSize: 14,
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Text(
+                                      serie.releaseDate,
+                                      style: const TextStyle(
+                                        color: AppColors.terinary,
+                                        fontSize: 16,
+                                        fontFamily: "REM",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      "Language :  ",
+                                      style: TextStyle(
+                                        color: AppColors.offWhite,
+                                        fontSize: 14,
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Text(
+                                      serie.language,
+                                      style: const TextStyle(
+                                        color: AppColors.terinary,
+                                        fontSize: 16,
+                                        fontFamily: "REM",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

@@ -11,7 +11,7 @@ class MovieModel {
   final int totalVotes;
   final String backdrop;
   late String tagline;
-  late List<String> genres = [];
+  late List<dynamic> genres = [];
   late String status;
   late String revenue;
   late String budget;

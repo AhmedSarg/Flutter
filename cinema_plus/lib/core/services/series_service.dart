@@ -20,9 +20,7 @@ class SeriesService {
     });
     serie = SeriesModel.fromJson(result);
     serie.tagline = result["tagline"];
-    result["genres"].forEach((genre) {
-      serie.genres.add(genre["name"]);
-    });
+    serie.genres = result["genres"];
     serie.status = result["status"];
     serie.seasons.clear();
     result["seasons"].forEach((season) {

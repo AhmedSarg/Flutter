@@ -11,7 +11,7 @@ class SeriesModel {
   final int totalVotes;
   final String backdrop;
   late String tagline;
-  late List<String> genres = [];
+  late List<dynamic> genres = [];
   late String status;
   late List<Season> seasons = [];
   late int totalEpisodes;
