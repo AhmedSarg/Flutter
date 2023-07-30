@@ -1,4 +1,5 @@
 import 'package:cinema_plus/core/services/actor_service.dart';
+import 'package:cinema_plus/core/services/genre_service.dart';
 import 'package:cinema_plus/core/services/movie_service.dart';
 import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
@@ -263,12 +264,8 @@ class _MoviePageState extends State<MoviePage> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: ((context) => GenrePage(
-                                                movies: MovieService()
-                                                    .getGenreMovies(
-                                                  movie.genres[index]["id"],
-                                                ),
-                                                series: SeriesService()
-                                                    .getGenreSeries(
+                                                entites:
+                                                    GenreService().getGenre(
                                                   movie.genres[index]["id"],
                                                 ),
                                                 title: movie.genres[index]

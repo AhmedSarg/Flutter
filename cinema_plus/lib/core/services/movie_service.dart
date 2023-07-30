@@ -87,24 +87,24 @@ class MovieService {
     return movie;
   }
 
-  Future<List<MovieModel>> getGenreMovies(int genreId) async {
-    String genreEndpoint = "discover/movie";
-    String query = "&with_genres=$genreId";
-    String url = baseUrl + genreEndpoint + apiKey + query;
-    late List<dynamic> result;
-    late List<MovieModel> genreMovies = [];
-    final dio = Dio();
-    await dio.get(url).then((value) {
-      result = value.data["results"];
-    });
-    result.forEach((movie) {
-      genreMovies.add(MovieModel.fromJson(movie));
-    });
-    genreMovies.sort(((a, b) {
-      return b.rating.compareTo(a.rating);
-    }));
-    return genreMovies;
-  }
+  // Future<List<MovieModel>> getGenreMovies(int genreId) async {
+  //   String genreEndpoint = "discover/movie";
+  //   String query = "&with_genres=$genreId";
+  //   String url = baseUrl + genreEndpoint + apiKey + query;
+  //   late List<dynamic> result;
+  //   late List<MovieModel> genreMovies = [];
+  //   final dio = Dio();
+  //   await dio.get(url).then((value) {
+  //     result = value.data["results"];
+  //   });
+  //   result.forEach((movie) {
+  //     genreMovies.add(MovieModel.fromJson(movie));
+  //   });
+  //   genreMovies.sort(((a, b) {
+  //     return b.rating.compareTo(a.rating);
+  //   }));
+  //   return genreMovies;
+  // }
 
   Future<List<MovieModel>> getPopular() async {
     String endpoint = "popular";

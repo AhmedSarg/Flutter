@@ -9,6 +9,7 @@ class SeriesModel {
   final String overview;
   final double rating;
   final int totalVotes;
+  final double popularity;
   final String backdrop;
   late String tagline;
   late List<dynamic> genres = [];
@@ -26,6 +27,7 @@ class SeriesModel {
     required this.overview,
     required this.rating,
     required this.totalVotes,
+    required this.popularity,
     required this.backdrop,
   });
 
@@ -41,6 +43,7 @@ class SeriesModel {
       overview: jsonData["overview"],
       rating: double.parse((jsonData["vote_average"]).toStringAsFixed(1)),
       totalVotes: jsonData["vote_count"],
+      popularity: jsonData["popularity"],
       backdrop: baseOrgPosterUrl + jsonData["backdrop_path"],
     );
   }

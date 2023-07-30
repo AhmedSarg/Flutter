@@ -1,19 +1,18 @@
 import 'package:cinema_plus/core/services/movie_service.dart';
+import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:cinema_plus/features/model/series_model.dart';
-import 'package:cinema_plus/features/screens/home_screen.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
+import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
 
 class GenrePage extends StatefulWidget {
-  final Future<List<MovieModel>> movies;
-  final Future<List<SeriesModel>> series;
+  final Future<List<dynamic>> entites;
   final String title;
   const GenrePage({
     super.key,
-    required this.movies,
-    required this.series,
+    required this.entites,
     required this.title,
   });
 
@@ -34,19 +33,19 @@ class _GenrePageState extends State<GenrePage> {
       ),
       backgroundColor: AppColors.primary,
       body: FutureBuilder(
-          future: widget.movies,
+          future: widget.entites,
           builder: (context, snapshot) {
             Widget result;
             if (snapshot.hasData) {
-              List<MovieModel> moviesList = snapshot.data!;
+              List<dynamic> list = snapshot.data!;
               result = SizedBox(
                 width: double.infinity,
                 child: ListView.separated(
                   scrollDirection: Axis.vertical,
-                  itemCount: moviesList.length,
+                  itemCount: list.length,
                   separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: ((context, index) {
-                    return movieGenreCard(context, moviesList[index]);
+                    return entitieGenreCard(context, list[index]);
                   }),
                 ),
               );
@@ -68,17 +67,28 @@ class _GenrePageState extends State<GenrePage> {
   }
 }
 
-Widget movieGenreCard(context, MovieModel movie) {
+Widget entitieGenreCard(context, dynamic entity) {
   return GestureDetector(
     onTap: () async {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: ((context) => MoviePage(
-                movie: MovieService().getMovieDetails(movie.id),
-                title: movie.title,
-              )),
-        ),
-      );
+      if (entity.runtimeType == MovieModel) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: ((context) => MoviePage(
+                  movie: MovieService().getMovieDetails(entity.id),
+                  title: entity.title,
+                )),
+          ),
+        );
+      } else if (entity.runtimeType == SeriesModel) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: ((context) => SeriesPage(
+                  serie: SeriesService().getSeriesDetails(entity.id),
+                  title: entity.title,
+                )),
+          ),
+        );
+      }
     },
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -115,7 +125,7 @@ Widget movieGenreCard(context, MovieModel movie) {
                     bottomLeft: Radius.circular(10),
                   ),
                   child: Image.network(
-                    movie.poster,
+                    entity.poster,
                     width: 140,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) {
@@ -156,7 +166,7 @@ Widget movieGenreCard(context, MovieModel movie) {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          movie.rating.toString(),
+                          entity.rating.toString(),
                           style: const TextStyle(
                               color: AppColors.white,
                               fontFamily: "REM",
@@ -174,7 +184,7 @@ Widget movieGenreCard(context, MovieModel movie) {
               padding:
                   const EdgeInsets.only(top: 2, bottom: 5, right: 10, left: 10),
               child: Text(
-                movie.title,
+                entity.title,
                 softWrap: true,
                 style: const TextStyle(
                   fontFamily: "REM",
