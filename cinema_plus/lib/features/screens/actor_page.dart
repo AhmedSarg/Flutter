@@ -235,7 +235,7 @@ Widget movieCard(context, Map<String, dynamic> movie) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => MoviePage(
-                movie: MovieService().getMovieDetails(movie["id"]),
+                movieId: movie["id"],
                 title: movie["title"],
               )),
         ),

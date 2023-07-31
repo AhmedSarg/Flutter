@@ -1,9 +1,11 @@
-import 'package:cinema_plus/core/services/movie_service.dart';
+import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
+import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
 import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/services/series_service.dart';
 import '../../core/utils/app_colors.dart';
@@ -18,16 +20,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late MovieModel movieModel;
-  late MovieService movieService;
   late SeriesModel seriesModel;
   late SeriesService seriesService;
 
   @override
   void initState() {
     super.initState();
-    movieService = MovieService();
-    seriesService = SeriesService();
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -39,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    DataCubit cubit = BlocProvider.of<DataCubit>(context);
+    cubit.getExplore();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -77,21 +77,54 @@ class _HomeScreenState extends State<HomeScreen>
           ],
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(color: AppColors.primary),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              movieList(movieService.getPopular(), "Popular Movies"),
-              movieList(movieService.getTopRated(), "Top Rated Movies"),
-              seriesList(seriesService.getPopular(), "Popular Series"),
-              seriesList(seriesService.getTopRated(), "Top Rated Series"),
-            ],
-          ),
-        ),
+      backgroundColor: AppColors.primary,
+      body: BlocBuilder<DataCubit, DataState>(
+        builder: ((context, state) {
+          if (state is DataSuccess) {
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(color: AppColors.primary),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    movieList(cubit.popularMovies, "Popular Movies"),
+                    movieList(cubit.topRatedMovies, "Top Rated Movies"),
+                    seriesList(cubit.popularSeries, "Popular Series"),
+                    seriesList(cubit.topRatedSeries, "Top Rated Series"),
+                  ],
+                ),
+              ),
+            );
+          } else if (state is DataFailure) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Error: check internet connection",
+                  style: TextStyle(
+                    color: AppColors.offWhite,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Montserrat",
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("retry"),
+                )
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.terinary,
+                strokeWidth: 1,
+              ),
+            );
+          }
+        }),
       ),
     );
   }
@@ -115,56 +148,15 @@ Widget movieList(movies, title) {
       ),
       SizedBox(
         height: 370,
-        child: FutureBuilder<List<MovieModel>>(
-          future: movies,
-          builder: ((context, snapshot) {
-            late Widget result;
-            if (snapshot.hasData) {
-              result = ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return movie(context, snapshot.data![index]);
-                },
-              );
-            } else if (snapshot.hasError) {
-              result = Center(
-                child: Text(snapshot.error.toString()),
-              );
-            } else {
-              result = ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                itemCount: 20,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: const EdgeInsets.all(20),
-                    height: 50,
-                    width: 180,
-                    decoration: const BoxDecoration(
-                      color: AppColors.transperantOffWhite,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                        bottomLeft: Radius.circular(10),
-                      ),
-                    ),
-                    child: const Center(
-                        child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                    )),
-                  );
-                },
-              );
-            }
-            return result;
-          }),
+        child: ListView.separated(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
+          itemCount: movies.length,
+          itemBuilder: (BuildContext context, int index) {
+            return movie(context, movies[index]);
+          },
         ),
       ),
     ],
@@ -188,60 +180,17 @@ Widget seriesList(series, title) {
         ),
       ),
       SizedBox(
-        height: 370,
-        child: FutureBuilder<List<SeriesModel>>(
-          future: series,
-          builder: ((context, snapshot) {
-            late Widget result;
-            if (snapshot.hasData) {
-              result = ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return serie(context, snapshot.data![index]);
-                },
-              );
-            } else if (snapshot.hasError) {
-              result = Center(
-                child: Text(snapshot.error.toString()),
-              );
-            } else {
-              result = ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                itemCount: 20,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: const EdgeInsets.all(20),
-                    height: 50,
-                    width: 180,
-                    decoration: const BoxDecoration(
-                      color: AppColors.transperantOffWhite,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                        bottomLeft: Radius.circular(10),
-                      ),
-                    ),
-                    child: const Center(
-                        child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                    )),
-                  );
-                  ;
-                },
-              );
-            }
-            return result;
-          }),
-        ),
-      ),
+          height: 370,
+          child: ListView.separated(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+            itemCount: series.length,
+            itemBuilder: (BuildContext context, int index) {
+              return serie(context, series[index]);
+            },
+          )),
     ],
   );
 }
@@ -252,7 +201,7 @@ Widget movie(context, MovieModel movie) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => MoviePage(
-                movie: MovieService().getMovieDetails(movie.id),
+                movieId: movie.id,
                 title: movie.title,
               )),
         ),
@@ -380,7 +329,7 @@ Widget serie(context, SeriesModel serie) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => SeriesPage(
-                serie: SeriesService().getSeriesDetails(serie.id),
+                serieId: serie.id,
                 title: serie.title,
               )),
         ),

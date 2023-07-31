@@ -1,19 +1,19 @@
+import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
+import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/core/services/actor_service.dart';
 import 'package:cinema_plus/core/services/genre_service.dart';
-import 'package:cinema_plus/core/services/movie_service.dart';
-import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/actor_page.dart';
 import 'package:cinema_plus/features/screens/genre_page.dart';
-import 'package:cinema_plus/features/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SeriesPage extends StatefulWidget {
-  final Future<SeriesModel> serie;
+  final int serieId;
   final String title;
-  const SeriesPage({super.key, required this.serie, required this.title});
+  const SeriesPage({super.key, required this.serieId, required this.title});
 
   @override
   State<SeriesPage> createState() => _SeriesPageState();
@@ -22,6 +22,8 @@ class SeriesPage extends StatefulWidget {
 class _SeriesPageState extends State<SeriesPage> {
   @override
   Widget build(BuildContext context) {
+    DataCubit cubit = BlocProvider.of<DataCubit>(context);
+    cubit.getMovieDetails(movieId: widget.serieId);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -30,13 +32,11 @@ class _SeriesPageState extends State<SeriesPage> {
         ),
       ),
       backgroundColor: AppColors.primary,
-      body: FutureBuilder<SeriesModel>(
-        future: widget.serie,
-        builder: (context, snapshot) {
-          late Widget result;
-          if (snapshot.hasData) {
-            SeriesModel serie = snapshot.data!;
-            result = Column(
+      body: BlocBuilder<DataCubit, DataState>(
+        builder: ((context, state) {
+          if (state is DataSuccess) {
+            SeriesModel serie = cubit.seriePage;
+            return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
@@ -455,22 +455,34 @@ class _SeriesPageState extends State<SeriesPage> {
                 )
               ],
             );
-          } else if (snapshot.hasError) {
-            result = Center(
-                child: Text(
-              snapshot.error.toString(),
-              style: const TextStyle(color: AppColors.offWhite),
-            ));
+          } else if (state is DataFailure) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Error: check internet connection",
+                  style: TextStyle(
+                    color: AppColors.offWhite,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Montserrat",
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("retry"),
+                )
+              ],
+            );
           } else {
-            result = const Center(
+            return const Center(
               child: CircularProgressIndicator(
                 color: AppColors.terinary,
                 strokeWidth: 1,
               ),
             );
           }
-          return result;
-        },
+        }),
       ),
     );
   }

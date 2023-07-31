@@ -1,9 +1,27 @@
+import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
+import 'package:cinema_plus/core/services/actor_service.dart';
+import 'package:cinema_plus/core/services/genre_service.dart';
+import 'package:cinema_plus/core/services/movie_service.dart';
+import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    BlocProvider(
+      create: (context) {
+        return DataCubit(
+          MovieService(),
+          SeriesService(),
+          ActorService(),
+          GenreService(),
+        );
+      },
+      child: const MyApp(),
+    ),
+  );
 }
 
 const MaterialColor primarySwatch = MaterialColor(0xFFCC7A09, <int, Color>{

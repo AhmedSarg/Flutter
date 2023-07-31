@@ -74,7 +74,7 @@ Widget entitieGenreCard(context, dynamic entity) {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: ((context) => MoviePage(
-                  movie: MovieService().getMovieDetails(entity.id),
+                  movieId: entity.id,
                   title: entity.title,
                 )),
           ),
