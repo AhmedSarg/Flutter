@@ -1,7 +1,6 @@
 import 'package:cinema_plus/core/bloc/bio_cubit/bio_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
-import 'package:cinema_plus/core/services/genre_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/model/movie_model.dart';
@@ -28,6 +27,7 @@ class _MoviePageState extends State<MoviePage> {
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
     cubit.getMovieDetails(movieId: widget.movieId);
+    MovieModel? movie;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +39,7 @@ class _MoviePageState extends State<MoviePage> {
       body: BlocBuilder<DataCubit, DataState>(
         builder: ((context, state) {
           if (state is DataSuccess) {
-            MovieModel movie = cubit.moviePage;
+            movie ??= cubit.moviePage;
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -55,7 +55,7 @@ class _MoviePageState extends State<MoviePage> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
                           child: Image.network(
-                            movie.backdrop,
+                            movie!.backdrop,
                             width: 360,
                             height: 202.7,
                             loadingBuilder: (context, child, loadingProgress) {
@@ -87,7 +87,7 @@ class _MoviePageState extends State<MoviePage> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(10)),
                                 child: Image.network(
-                                  movie.poster,
+                                  movie!.poster,
                                   width: 110,
                                   loadingBuilder:
                                       ((context, child, loadingProgress) {
@@ -125,7 +125,7 @@ class _MoviePageState extends State<MoviePage> {
                             bottom: 5,
                           ),
                           child: Text(
-                            movie.title,
+                            movie!.title,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 18,
@@ -137,7 +137,7 @@ class _MoviePageState extends State<MoviePage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 5),
                           child: Text(
-                            movie.tagline,
+                            movie!.tagline,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 10,
@@ -164,7 +164,7 @@ class _MoviePageState extends State<MoviePage> {
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, top: 10, bottom: 15),
                           child: Text(
-                            movie.overview,
+                            movie!.overview,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 14,
@@ -193,7 +193,7 @@ class _MoviePageState extends State<MoviePage> {
                           child: Row(
                             children: [
                               Text(
-                                movie.rating.toString(),
+                                movie!.rating.toString(),
                                 style: const TextStyle(
                                   color: AppColors.terinary,
                                   fontSize: 20,
@@ -211,7 +211,7 @@ class _MoviePageState extends State<MoviePage> {
                                 ),
                               ),
                               Text(
-                                movie.totalVotes.toString(),
+                                movie!.totalVotes.toString(),
                                 style: const TextStyle(
                                   color: AppColors.terinary,
                                   fontSize: 20,
@@ -267,16 +267,16 @@ class _MoviePageState extends State<MoviePage> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: ((context) => GenrePage(
-                                              genreId: movie.genres[index]
+                                              genreId: movie!.genres[index]
                                                   ["id"],
-                                              title: movie.genres[index]
+                                              title: movie!.genres[index]
                                                   ["name"],
                                             )),
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    movie.genres[index]["name"],
+                                    movie!.genres[index]["name"],
                                     style: const TextStyle(
                                       color: AppColors.offWhite,
                                       fontSize: 10,
@@ -290,7 +290,7 @@ class _MoviePageState extends State<MoviePage> {
                             separatorBuilder: ((context, index) {
                               return const Divider();
                             }),
-                            itemCount: movie.genres.length,
+                            itemCount: movie!.genres.length,
                           ),
                         ),
                         const Padding(
@@ -328,7 +328,7 @@ class _MoviePageState extends State<MoviePage> {
                                       ),
                                     ),
                                     Text(
-                                      movie.status,
+                                      movie!.status,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -353,7 +353,7 @@ class _MoviePageState extends State<MoviePage> {
                                       ),
                                     ),
                                     Text(
-                                      movie.releaseDate,
+                                      movie!.releaseDate,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -378,7 +378,7 @@ class _MoviePageState extends State<MoviePage> {
                                       ),
                                     ),
                                     Text(
-                                      movie.language,
+                                      movie!.language,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -403,7 +403,7 @@ class _MoviePageState extends State<MoviePage> {
                                       ),
                                     ),
                                     Text(
-                                      movie.budget,
+                                      movie!.budget,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -428,7 +428,7 @@ class _MoviePageState extends State<MoviePage> {
                                       ),
                                     ),
                                     Text(
-                                      movie.revenue,
+                                      movie!.revenue,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -465,13 +465,13 @@ class _MoviePageState extends State<MoviePage> {
                             itemBuilder: ((context, index) {
                               return actorCard(
                                 context,
-                                movie.cast[index],
+                                movie!.cast[index],
                                 widget.title,
                               );
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
-                            itemCount: movie.cast.length,
+                            itemCount: movie!.cast.length,
                           ),
                         ),
                       ],
@@ -516,8 +516,8 @@ class _MoviePageState extends State<MoviePage> {
 
 Widget actorCard(context, ActorModel actor, String title) {
   return GestureDetector(
-    onTap: () {
-      Navigator.of(context).push(
+    onTap: () async {
+      await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => BlocProvider(
                 create: (context) {

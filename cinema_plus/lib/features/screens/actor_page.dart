@@ -30,6 +30,7 @@ class _ActorPageState extends State<ActorPage> {
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
     cubit.getActorDetails(actorId: widget.actorId);
+    ActorModel? actorDetails;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -40,7 +41,7 @@ class _ActorPageState extends State<ActorPage> {
       backgroundColor: AppColors.primary,
       body: BlocBuilder<DataCubit, DataState>(builder: (context, state) {
         if (state is DataSuccess) {
-          ActorModel actorDetails = cubit.actorPage;
+          actorDetails ??= cubit.actorPage;
           return Column(
             children: [
               Expanded(
@@ -68,7 +69,7 @@ class _ActorPageState extends State<ActorPage> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                   child: Image.network(
-                                    actorDetails.img!,
+                                    actorDetails!.img!,
                                     width: 110,
                                     loadingBuilder:
                                         ((context, child, loadingProgress) {
@@ -91,7 +92,7 @@ class _ActorPageState extends State<ActorPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              actorDetails.name!,
+                              actorDetails!.name!,
                               style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontFamily: "REM",
@@ -134,7 +135,7 @@ class _ActorPageState extends State<ActorPage> {
                                     return SizedBox(
                                       height: 100,
                                       child: Text(
-                                        actorDetails.bio!,
+                                        actorDetails!.bio!,
                                         style: const TextStyle(
                                             color: AppColors.offWhite,
                                             fontSize: 14,
@@ -146,7 +147,7 @@ class _ActorPageState extends State<ActorPage> {
                                     return SizedBox(
                                       height: null,
                                       child: Text(
-                                        actorDetails.bio!,
+                                        actorDetails!.bio!,
                                         style: const TextStyle(
                                             color: AppColors.offWhite,
                                             fontSize: 14,
@@ -206,12 +207,12 @@ class _ActorPageState extends State<ActorPage> {
                                 itemBuilder: ((context, index) {
                                   return movieCard(
                                     context,
-                                    actorDetails.movies[index],
+                                    actorDetails!.movies[index],
                                   );
                                 }),
                                 separatorBuilder: ((context, index) =>
                                     const Divider()),
-                                itemCount: actorDetails.movies.length,
+                                itemCount: actorDetails!.movies.length,
                               ),
                             ),
                             const Padding(
@@ -233,12 +234,12 @@ class _ActorPageState extends State<ActorPage> {
                                 itemBuilder: ((context, index) {
                                   return serieCard(
                                     context,
-                                    actorDetails.series[index],
+                                    actorDetails!.series[index],
                                   );
                                 }),
                                 separatorBuilder: ((context, index) =>
                                     const Divider()),
-                                itemCount: actorDetails.series.length,
+                                itemCount: actorDetails!.series.length,
                               ),
                             ),
                           ],
@@ -286,14 +287,12 @@ class _ActorPageState extends State<ActorPage> {
 Widget movieCard(context, Map<String, dynamic> movie) {
   return GestureDetector(
     onTap: () async {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: ((context) => MoviePage(
-                movieId: movie["id"],
-                title: movie["title"],
-              )),
-        ),
-      );
+      await Navigator.of(context).push(MaterialPageRoute(
+        builder: ((context) => MoviePage(
+              movieId: movie["id"],
+              title: movie["title"],
+            )),
+      ));
     },
     child: Container(
       margin: const EdgeInsets.only(left: 20, right: 10, top: 20, bottom: 20),

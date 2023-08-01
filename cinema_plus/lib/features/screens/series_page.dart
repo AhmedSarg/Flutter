@@ -28,6 +28,7 @@ class _SeriesPageState extends State<SeriesPage> {
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
     cubit.getSerieDetails(serieId: widget.serieId);
+    SeriesModel? serie;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +40,7 @@ class _SeriesPageState extends State<SeriesPage> {
       body: BlocBuilder<DataCubit, DataState>(
         builder: ((context, state) {
           if (state is DataSuccess) {
-            SeriesModel serie = cubit.seriePage;
+            serie ??= cubit.seriePage;
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -55,7 +56,7 @@ class _SeriesPageState extends State<SeriesPage> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
                           child: Image.network(
-                            serie.backdrop,
+                            serie!.backdrop,
                             width: 360,
                             height: 202.7,
                             loadingBuilder: (context, child, loadingProgress) {
@@ -87,7 +88,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(10)),
                                 child: Image.network(
-                                  serie.poster,
+                                  serie!.poster,
                                   width: 110,
                                   loadingBuilder:
                                       ((context, child, loadingProgress) {
@@ -125,7 +126,7 @@ class _SeriesPageState extends State<SeriesPage> {
                             bottom: 5,
                           ),
                           child: Text(
-                            serie.title,
+                            serie!.title,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 18,
@@ -137,7 +138,7 @@ class _SeriesPageState extends State<SeriesPage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 5),
                           child: Text(
-                            serie.tagline,
+                            serie!.tagline,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 10,
@@ -164,7 +165,7 @@ class _SeriesPageState extends State<SeriesPage> {
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, top: 10, bottom: 15),
                           child: Text(
-                            serie.overview,
+                            serie!.overview,
                             style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontSize: 14,
@@ -193,7 +194,7 @@ class _SeriesPageState extends State<SeriesPage> {
                           child: Row(
                             children: [
                               Text(
-                                serie.rating.toString(),
+                                serie!.rating.toString(),
                                 style: const TextStyle(
                                   color: AppColors.terinary,
                                   fontSize: 20,
@@ -211,7 +212,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                 ),
                               ),
                               Text(
-                                serie.totalVotes.toString(),
+                                serie!.totalVotes.toString(),
                                 style: const TextStyle(
                                   color: AppColors.terinary,
                                   fontSize: 20,
@@ -267,16 +268,16 @@ class _SeriesPageState extends State<SeriesPage> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: ((context) => GenrePage(
-                                              genreId: serie.genres[index]
+                                              genreId: serie!.genres[index]
                                                   ["id"],
-                                              title: serie.genres[index]
+                                              title: serie!.genres[index]
                                                   ["name"],
                                             )),
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    serie.genres[index]["name"],
+                                    serie!.genres[index]["name"],
                                     style: const TextStyle(
                                       color: AppColors.offWhite,
                                       fontSize: 10,
@@ -290,7 +291,7 @@ class _SeriesPageState extends State<SeriesPage> {
                             separatorBuilder: ((context, index) {
                               return const Divider();
                             }),
-                            itemCount: serie.genres.length,
+                            itemCount: serie!.genres.length,
                           ),
                         ),
                         const Padding(
@@ -328,7 +329,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                       ),
                                     ),
                                     Text(
-                                      serie.status,
+                                      serie!.status,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -353,7 +354,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                       ),
                                     ),
                                     Text(
-                                      serie.releaseDate,
+                                      serie!.releaseDate,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -378,7 +379,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                       ),
                                     ),
                                     Text(
-                                      serie.language,
+                                      serie!.language,
                                       style: const TextStyle(
                                         color: AppColors.terinary,
                                         fontSize: 16,
@@ -415,13 +416,13 @@ class _SeriesPageState extends State<SeriesPage> {
                             itemBuilder: ((context, index) {
                               return actorCard(
                                 context,
-                                serie.cast[index],
+                                serie!.cast[index],
                                 widget.title,
                               );
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
-                            itemCount: serie.cast.length,
+                            itemCount: serie!.cast.length,
                           ),
                         ),
                         const Padding(
@@ -445,11 +446,11 @@ class _SeriesPageState extends State<SeriesPage> {
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: ((context, index) {
-                              return seasonCard(context, serie.seasons[index]);
+                              return seasonCard(context, serie!.seasons[index]);
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
-                            itemCount: serie.seasons.length,
+                            itemCount: serie!.seasons.length,
                           ),
                         ),
                       ],

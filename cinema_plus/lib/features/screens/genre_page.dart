@@ -28,6 +28,7 @@ class _GenrePageState extends State<GenrePage> {
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
     cubit.getGenre(genreId: widget.genreId);
+    List<dynamic>? list;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,15 +40,15 @@ class _GenrePageState extends State<GenrePage> {
       body: BlocBuilder<DataCubit, DataState>(
         builder: (context, state) {
           if (state is DataSuccess) {
-            List<dynamic> list = cubit.genres;
+            list ??= cubit.genres;
             return SizedBox(
               width: double.infinity,
               child: ListView.separated(
                 scrollDirection: Axis.vertical,
-                itemCount: list.length,
+                itemCount: list!.length,
                 separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: ((context, index) {
-                  return entitieGenreCard(context, list[index]);
+                  return entitieGenreCard(context, list![index]);
                 }),
               ),
             );
