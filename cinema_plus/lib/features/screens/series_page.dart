@@ -1,6 +1,6 @@
+import 'package:cinema_plus/core/bloc/bio_cubit/bio_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
-import 'package:cinema_plus/core/services/actor_service.dart';
 import 'package:cinema_plus/core/services/genre_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
@@ -13,7 +13,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SeriesPage extends StatefulWidget {
   final int serieId;
   final String title;
-  const SeriesPage({super.key, required this.serieId, required this.title});
+  const SeriesPage({
+    super.key,
+    required this.serieId,
+    required this.title,
+  });
 
   @override
   State<SeriesPage> createState() => _SeriesPageState();
@@ -23,7 +27,7 @@ class _SeriesPageState extends State<SeriesPage> {
   @override
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
-    cubit.getMovieDetails(movieId: widget.serieId);
+    cubit.getSerieDetails(serieId: widget.serieId);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -263,9 +267,8 @@ class _SeriesPageState extends State<SeriesPage> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: ((context) => GenrePage(
-                                              entites: GenreService().getGenre(
-                                                serie.genres[index]["id"],
-                                              ),
+                                              genreId: serie.genres[index]
+                                                  ["id"],
                                               title: serie.genres[index]
                                                   ["name"],
                                             )),
@@ -458,6 +461,7 @@ class _SeriesPageState extends State<SeriesPage> {
           } else if (state is DataFailure) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
                   "Error: check internet connection",
@@ -493,9 +497,14 @@ Widget actorCard(context, ActorModel actor, String title) {
     onTap: () {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: ((context) => ActorPage(
-                actor: ActorService().getActorDetails(actor),
-                name: actor.name!,
+          builder: ((context) => BlocProvider(
+                create: (context) {
+                  return BioCubit();
+                },
+                child: ActorPage(
+                  actorId: actor.id!,
+                  name: actor.name!,
+                ),
               )),
         ),
       );

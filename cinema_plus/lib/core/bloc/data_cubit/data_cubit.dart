@@ -61,10 +61,10 @@ class DataCubit extends Cubit<DataState> {
     }
   }
 
-  void getActorDetails({required ActorModel actor}) async {
+  void getActorDetails({required int actorId}) async {
     emit(DataLoading());
     try {
-      actorPage = await actorService.getActorDetails(actor);
+      actorPage = await actorService.getActorDetails(actorId);
       emit(DataSuccess());
     } catch (e) {
       emit(DataFailure());

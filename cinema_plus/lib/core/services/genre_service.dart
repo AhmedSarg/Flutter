@@ -10,7 +10,6 @@ class GenreService {
     String genreEndpoint = "/movie";
     String query = "&with_genres=$genreId";
     String url = baseUrl + genreEndpoint + apiKey + query;
-    print(url);
     late List<dynamic> result;
     late List<dynamic> genreEntities = [];
     final dio = Dio();
@@ -20,14 +19,24 @@ class GenreService {
     result.forEach((movie) {
       genreEntities.add(MovieModel.fromJson(movie));
     });
-    print("check");
     genreEndpoint = "/tv";
     url = baseUrl + genreEndpoint + apiKey + query;
     await dio.get(url).then((value) {
       result = value.data["results"];
     });
     result.forEach((serie) {
-      genreEntities.add(SeriesModel.fromJson(serie));
+      if (serie["id"] != null &&
+          serie["title"] != null &&
+          serie["poster_path"] != null &&
+          serie["first_air_date"] != null &&
+          serie["original_language"] != null &&
+          serie["overview"] != null &&
+          serie["vote_average"] != null &&
+          serie["vote_count"] != null &&
+          serie["popularity"] != null &&
+          serie["backdrop_path"] != null) {
+        genreEntities.add(SeriesModel.fromJson(serie));
+      }
     });
     genreEntities.sort(((a, b) {
       return b.popularity.compareTo(a.popularity);

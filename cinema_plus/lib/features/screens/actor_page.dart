@@ -1,3 +1,7 @@
+import 'package:cinema_plus/core/bloc/bio_cubit/bio_cubit.dart';
+import 'package:cinema_plus/core/bloc/bio_cubit/bio_state.dart';
+import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
+import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/core/services/movie_service.dart';
 import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
@@ -5,21 +9,27 @@ import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ActorPage extends StatefulWidget {
-  final Future<ActorModel> actor;
+  final int actorId;
   final String name;
-  const ActorPage({super.key, required this.actor, required this.name});
+  const ActorPage({
+    super.key,
+    required this.actorId,
+    required this.name,
+  });
 
   @override
   State<ActorPage> createState() => _ActorPageState();
 }
 
 class _ActorPageState extends State<ActorPage> {
-  bool extendBio = false;
   @override
   Widget build(BuildContext context) {
+    DataCubit cubit = BlocProvider.of<DataCubit>(context);
+    cubit.getActorDetails(actorId: widget.actorId);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -28,203 +38,247 @@ class _ActorPageState extends State<ActorPage> {
         ),
       ),
       backgroundColor: AppColors.primary,
-      body: FutureBuilder<ActorModel>(
-          future: widget.actor,
-          builder: (context, snapshot) {
-            Widget result;
-            if (snapshot.hasData) {
-              ActorModel actorDetails = snapshot.data!;
-              result = Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocBuilder<DataCubit, DataState>(builder: (context, state) {
+        if (state is DataSuccess) {
+          ActorModel actorDetails = cubit.actorPage;
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, top: 30, right: 20),
-                                child: Container(
-                                  width: 110,
-                                  height: 165,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.terinary,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(0.2),
-                                    child: ClipRRect(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
-                                      child: Image.network(
-                                        actorDetails.img!,
-                                        width: 110,
-                                        loadingBuilder:
-                                            ((context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          } else {
-                                            return const Center(
-                                              child: CircularProgressIndicator(
-                                                color: AppColors.offWhite,
-                                                strokeWidth: 1,
-                                              ),
-                                            );
-                                          }
-                                        }),
-                                      ),
-                                    ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 30, right: 20),
+                            child: Container(
+                              width: 110,
+                              height: 165,
+                              decoration: const BoxDecoration(
+                                color: AppColors.terinary,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(0.2),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  child: Image.network(
+                                    actorDetails.img!,
+                                    width: 110,
+                                    loadingBuilder:
+                                        ((context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppColors.offWhite,
+                                            strokeWidth: 1,
+                                          ),
+                                        );
+                                      }
+                                    }),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  actorDetails.name!,
-                                  style: const TextStyle(
-                                    color: AppColors.offWhite,
-                                    fontFamily: "REM",
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                              top: 35,
-                            ),
-                            child: Text(
-                              "Biography",
-                              style: TextStyle(
-                                  color: AppColors.offWhite,
-                                  fontSize: 18,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w900),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              bottom: 15,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0,
-                                  ),
-                                  child: SizedBox(
-                                    height: extendBio ? null : 100,
-                                    child: Text(
-                                      actorDetails.bio!,
-                                      style: const TextStyle(
-                                          color: AppColors.offWhite,
-                                          fontSize: 14,
-                                          fontFamily: "Montserrat",
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        extendBio = !extendBio;
-                                      });
-                                    },
-                                    icon: Icon(
-                                      extendBio
-                                          ? FontAwesomeIcons.angleUp
-                                          : FontAwesomeIcons.angleDown,
-                                      color: AppColors.offWhite,
-                                    ),
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 35, left: 20),
-                                  child: Text(
-                                    "Movies",
-                                    style: TextStyle(
-                                        color: AppColors.offWhite,
-                                        fontSize: 18,
-                                        fontFamily: "Montserrat",
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 290,
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: ((context, index) {
-                                      return movieCard(
-                                        context,
-                                        actorDetails.movies[index],
-                                      );
-                                    }),
-                                    separatorBuilder: ((context, index) =>
-                                        const Divider()),
-                                    itemCount: actorDetails.movies.length,
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 35, left: 20),
-                                  child: Text(
-                                    "Series",
-                                    style: TextStyle(
-                                        color: AppColors.offWhite,
-                                        fontSize: 18,
-                                        fontFamily: "Montserrat",
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 290,
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: ((context, index) {
-                                      return serieCard(
-                                        context,
-                                        actorDetails.series[index],
-                                      );
-                                    }),
-                                    separatorBuilder: ((context, index) =>
-                                        const Divider()),
-                                    itemCount: actorDetails.series.length,
-                                  ),
-                                ),
-                              ],
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              actorDetails.name!,
+                              style: const TextStyle(
+                                color: AppColors.offWhite,
+                                fontFamily: "REM",
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          top: 35,
+                        ),
+                        child: Text(
+                          "Biography",
+                          style: TextStyle(
+                              color: AppColors.offWhite,
+                              fontSize: 18,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                          bottom: 15,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0,
+                              ),
+                              child: BlocBuilder<BioCubit, BioState>(
+                                builder: ((context, state) {
+                                  if (state is BioHidden) {
+                                    return SizedBox(
+                                      height: 100,
+                                      child: Text(
+                                        actorDetails.bio!,
+                                        style: const TextStyle(
+                                            color: AppColors.offWhite,
+                                            fontSize: 14,
+                                            fontFamily: "Montserrat",
+                                            fontWeight: FontWeight.w900),
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: null,
+                                      child: Text(
+                                        actorDetails.bio!,
+                                        style: const TextStyle(
+                                            color: AppColors.offWhite,
+                                            fontSize: 14,
+                                            fontFamily: "Montserrat",
+                                            fontWeight: FontWeight.w900),
+                                      ),
+                                    );
+                                  }
+                                }),
+                              ),
+                            ),
+                            Center(
+                              child: BlocBuilder<BioCubit, BioState>(
+                                builder: ((context, state) {
+                                  if (state is BioHidden) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        BlocProvider.of<BioCubit>(context)
+                                            .switchBioState();
+                                      },
+                                      icon: const Icon(
+                                        FontAwesomeIcons.angleDown,
+                                        color: AppColors.offWhite,
+                                      ),
+                                    );
+                                  } else {
+                                    return IconButton(
+                                      onPressed: () {
+                                        BlocProvider.of<BioCubit>(context)
+                                            .switchBioState();
+                                      },
+                                      icon: const Icon(
+                                        FontAwesomeIcons.angleUp,
+                                        color: AppColors.offWhite,
+                                      ),
+                                    );
+                                  }
+                                }),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 35, left: 20),
+                              child: Text(
+                                "Movies",
+                                style: TextStyle(
+                                    color: AppColors.offWhite,
+                                    fontSize: 18,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 290,
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: ((context, index) {
+                                  return movieCard(
+                                    context,
+                                    actorDetails.movies[index],
+                                  );
+                                }),
+                                separatorBuilder: ((context, index) =>
+                                    const Divider()),
+                                itemCount: actorDetails.movies.length,
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 35, left: 20),
+                              child: Text(
+                                "Series",
+                                style: TextStyle(
+                                    color: AppColors.offWhite,
+                                    fontSize: 18,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 290,
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: ((context, index) {
+                                  return serieCard(
+                                    context,
+                                    actorDetails.series[index],
+                                  );
+                                }),
+                                separatorBuilder: ((context, index) =>
+                                    const Divider()),
+                                itemCount: actorDetails.series.length,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              result = Center(
-                child: Text(snapshot.error.toString()),
-              );
-            } else {
-              result = const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.terinary,
-                  strokeWidth: 1,
                 ),
-              );
-            }
-            return result;
-          }),
+              ),
+            ],
+          );
+        } else if (state is DataFailure) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "Error: check internet connection",
+                style: TextStyle(
+                  color: AppColors.offWhite,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text("retry"),
+              )
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.terinary,
+              strokeWidth: 1,
+            ),
+          );
+        }
+      }),
     );
   }
 }
@@ -335,7 +389,7 @@ Widget serieCard(context, Map<String, dynamic> serie) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: ((context) => SeriesPage(
-                serie: SeriesService().getSeriesDetails(serie["id"]),
+                serieId: serie["id"],
                 title: serie["title"],
               )),
         ),

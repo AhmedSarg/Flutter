@@ -1,3 +1,5 @@
+import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
+import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/core/services/movie_service.dart';
 import 'package:cinema_plus/core/services/series_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
@@ -6,13 +8,14 @@ import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GenrePage extends StatefulWidget {
-  final Future<List<dynamic>> entites;
+  final int genreId;
   final String title;
   const GenrePage({
     super.key,
-    required this.entites,
+    required this.genreId,
     required this.title,
   });
 
@@ -21,9 +24,10 @@ class GenrePage extends StatefulWidget {
 }
 
 class _GenrePageState extends State<GenrePage> {
-  int extraIndex = -1;
   @override
   Widget build(BuildContext context) {
+    DataCubit cubit = BlocProvider.of<DataCubit>(context);
+    cubit.getGenre(genreId: widget.genreId);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,37 +36,51 @@ class _GenrePageState extends State<GenrePage> {
         ),
       ),
       backgroundColor: AppColors.primary,
-      body: FutureBuilder(
-          future: widget.entites,
-          builder: (context, snapshot) {
-            Widget result;
-            if (snapshot.hasData) {
-              List<dynamic> list = snapshot.data!;
-              result = SizedBox(
-                width: double.infinity,
-                child: ListView.separated(
-                  scrollDirection: Axis.vertical,
-                  itemCount: list.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: ((context, index) {
-                    return entitieGenreCard(context, list[index]);
-                  }),
+      body: BlocBuilder<DataCubit, DataState>(
+        builder: (context, state) {
+          if (state is DataSuccess) {
+            List<dynamic> list = cubit.genres;
+            return SizedBox(
+              width: double.infinity,
+              child: ListView.separated(
+                scrollDirection: Axis.vertical,
+                itemCount: list.length,
+                separatorBuilder: (context, index) => const Divider(),
+                itemBuilder: ((context, index) {
+                  return entitieGenreCard(context, list[index]);
+                }),
+              ),
+            );
+          } else if (state is DataFailure) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Error: check internet connection",
+                  style: TextStyle(
+                    color: AppColors.offWhite,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Montserrat",
+                  ),
                 ),
-              );
-            } else if (snapshot.hasError) {
-              result = Center(
-                child: Text(snapshot.error.toString()),
-              );
-            } else {
-              result = const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.terinary,
-                  strokeWidth: 1,
-                ),
-              );
-            }
-            return result;
-          }),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("retry"),
+                )
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.terinary,
+                strokeWidth: 1,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -83,7 +101,7 @@ Widget entitieGenreCard(context, dynamic entity) {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: ((context) => SeriesPage(
-                  serie: SeriesService().getSeriesDetails(entity.id),
+                  serieId: entity.id,
                   title: entity.title,
                 )),
           ),
