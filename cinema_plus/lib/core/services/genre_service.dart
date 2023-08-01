@@ -17,14 +17,27 @@ class GenreService {
       result = value.data["results"];
     });
     result.forEach((movie) {
-      genreEntities.add(MovieModel.fromJson(movie));
+      if (movie["id"] != null &&
+          movie["title"] != null &&
+          movie["poster_path"] != null &&
+          movie["release_date"] != null &&
+          movie["original_language"] != null &&
+          movie["overview"] != null &&
+          movie["vote_average"] != null &&
+          movie["vote_count"] != null &&
+          movie["popularity"] != null &&
+          movie["backdrop_path"] != null) {
+        genreEntities.add(MovieModel.fromJson(movie));
+      }
     });
+    print(genreEntities);
     genreEndpoint = "/tv";
     url = baseUrl + genreEndpoint + apiKey + query;
     await dio.get(url).then((value) {
       result = value.data["results"];
     });
     result.forEach((serie) {
+      print(serie);
       if (serie["id"] != null &&
           serie["title"] != null &&
           serie["poster_path"] != null &&
