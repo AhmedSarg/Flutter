@@ -4,6 +4,7 @@ import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
+import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/movie_page.dart';
 import 'package:cinema_plus/features/screens/series_page.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SeasonPage extends StatefulWidget {
-  final int actorId;
-  final String name;
+  final int serieId;
+  final String seasonName;
+  final int seasonNumber;
   const SeasonPage({
     super.key,
-    required this.actorId,
-    required this.name,
+    required this.serieId,
+    required this.seasonName,
+    required this.seasonNumber,
   });
 
   @override
@@ -27,19 +30,20 @@ class _SeasonPageState extends State<SeasonPage> {
   @override
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
-    cubit.getActorDetails(actorId: widget.actorId);
-    ActorModel? actorDetails;
+    cubit.getSeasonDetails(
+        serieId: widget.serieId, seasonNumber: widget.seasonNumber);
+    SeasonModel? season;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.name,
+          widget.seasonName,
           style: const TextStyle(color: AppColors.white, fontFamily: "REM"),
         ),
       ),
       backgroundColor: AppColors.primary,
       body: BlocBuilder<DataCubit, DataState>(builder: (context, state) {
         if (state is DataSuccess) {
-          actorDetails ??= cubit.actorPage;
+          season ??= cubit.seasonPage;
           return Column(
             children: [
               Expanded(
@@ -67,7 +71,7 @@ class _SeasonPageState extends State<SeasonPage> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                   child: Image.network(
-                                    actorDetails!.img!,
+                                    season!.poster,
                                     width: 110,
                                     loadingBuilder:
                                         ((context, child, loadingProgress) {
@@ -90,7 +94,7 @@ class _SeasonPageState extends State<SeasonPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              actorDetails!.name!,
+                              season!.name,
                               style: const TextStyle(
                                 color: AppColors.offWhite,
                                 fontFamily: "REM",
@@ -107,7 +111,7 @@ class _SeasonPageState extends State<SeasonPage> {
                           top: 35,
                         ),
                         child: Text(
-                          "Biography",
+                          "Overview",
                           style: TextStyle(
                               color: AppColors.offWhite,
                               fontSize: 18,
@@ -127,117 +131,16 @@ class _SeasonPageState extends State<SeasonPage> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0,
                               ),
-                              child: BlocBuilder<BioCubit, BioState>(
-                                builder: ((context, state) {
-                                  if (state is BioHidden) {
-                                    return SizedBox(
-                                      height: 100,
-                                      child: Text(
-                                        actorDetails!.bio!,
-                                        style: const TextStyle(
-                                            color: AppColors.offWhite,
-                                            fontSize: 14,
-                                            fontFamily: "Montserrat",
-                                            fontWeight: FontWeight.w900),
-                                      ),
-                                    );
-                                  } else {
-                                    return SizedBox(
-                                      height: null,
-                                      child: Text(
-                                        actorDetails!.bio!,
-                                        style: const TextStyle(
-                                            color: AppColors.offWhite,
-                                            fontSize: 14,
-                                            fontFamily: "Montserrat",
-                                            fontWeight: FontWeight.w900),
-                                      ),
-                                    );
-                                  }
-                                }),
-                              ),
-                            ),
-                            Center(
-                              child: BlocBuilder<BioCubit, BioState>(
-                                builder: ((context, state) {
-                                  if (state is BioHidden) {
-                                    return IconButton(
-                                      onPressed: () {
-                                        BlocProvider.of<BioCubit>(context)
-                                            .switchBioState();
-                                      },
-                                      icon: const Icon(
-                                        FontAwesomeIcons.angleDown,
-                                        color: AppColors.offWhite,
-                                      ),
-                                    );
-                                  } else {
-                                    return IconButton(
-                                      onPressed: () {
-                                        BlocProvider.of<BioCubit>(context)
-                                            .switchBioState();
-                                      },
-                                      icon: const Icon(
-                                        FontAwesomeIcons.angleUp,
-                                        color: AppColors.offWhite,
-                                      ),
-                                    );
-                                  }
-                                }),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 35, left: 20),
-                              child: Text(
-                                "Movies",
-                                style: TextStyle(
-                                    color: AppColors.offWhite,
-                                    fontSize: 18,
-                                    fontFamily: "Montserrat",
-                                    fontWeight: FontWeight.w900),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 290,
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: ((context, index) {
-                                  return movieCard(
-                                    context,
-                                    actorDetails!.movies[index],
-                                  );
-                                }),
-                                separatorBuilder: ((context, index) =>
-                                    const Divider()),
-                                itemCount: actorDetails!.movies.length,
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 35, left: 20),
-                              child: Text(
-                                "Series",
-                                style: TextStyle(
-                                    color: AppColors.offWhite,
-                                    fontSize: 18,
-                                    fontFamily: "Montserrat",
-                                    fontWeight: FontWeight.w900),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 290,
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: ((context, index) {
-                                  return serieCard(
-                                    context,
-                                    actorDetails!.series[index],
-                                  );
-                                }),
-                                separatorBuilder: ((context, index) =>
-                                    const Divider()),
-                                itemCount: actorDetails!.series.length,
+                              child: SizedBox(
+                                height: 100,
+                                child: Text(
+                                  season!.overview,
+                                  style: const TextStyle(
+                                      color: AppColors.offWhite,
+                                      fontSize: 14,
+                                      fontFamily: "Montserrat",
+                                      fontWeight: FontWeight.w900),
+                                ),
                               ),
                             ),
                           ],
@@ -250,24 +153,26 @@ class _SeasonPageState extends State<SeasonPage> {
             ],
           );
         } else if (state is DataFailure) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Error: check internet connection",
-                style: TextStyle(
-                  color: AppColors.offWhite,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: "Montserrat",
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Error: check internet connection",
+                  style: TextStyle(
+                    color: AppColors.offWhite,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Montserrat",
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text("retry"),
-              )
-            ],
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("retry"),
+                )
+              ],
+            ),
           );
         } else {
           return const Center(

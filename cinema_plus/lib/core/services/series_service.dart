@@ -1,4 +1,5 @@
 import 'package:cinema_plus/features/model/actor_model.dart';
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:dio/dio.dart';
 
 import '../../features/model/series_model.dart';
@@ -26,7 +27,7 @@ class SeriesService {
     result["seasons"].forEach((season) {
       if (season["season_number"] > 0) {
         serie.seasons.add(
-          Season(
+          SeasonModel(
             airDate: season["air_date"],
             id: season["id"],
             name: season["name"],
@@ -76,6 +77,32 @@ class SeriesService {
       return b.rating.compareTo(a.rating);
     }));
     return genreSeries;
+  }
+
+  Future<SeasonModel> getSeasonDetails(int serieId, int seasonNumber) async {
+    Map<String, dynamic> result = {};
+    late SeasonModel season;
+    String seriesEndpoint = "tv/";
+    String seasonEndpoint = "/season/";
+    String url = baseUrl +
+        seriesEndpoint +
+        serieId.toString() +
+        seasonEndpoint +
+        seasonNumber.toString() +
+        apiKey;
+    final dio = Dio();
+    await dio.get(url).then((value) {
+      result = value.data;
+    });
+    season = SeasonModel.fromJson(result);
+    print("check");
+    result["episodes"].forEach((episode) {
+      print(episode);
+      season.episodes.add(EpisodeModel.fromJson(episode));
+      print("done");
+    });
+    print(season);
+    return season;
   }
 
   Future<List<SeriesModel>> getPopular() async {

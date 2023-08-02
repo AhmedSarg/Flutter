@@ -14,7 +14,7 @@ class SeriesModel {
   late String tagline;
   late List<dynamic> genres = [];
   late String status;
-  late List<Season> seasons = [];
+  late List<SeasonModel> seasons = [];
   late int totalEpisodes;
   late List<ActorModel> cast = [];
 
@@ -49,7 +49,7 @@ class SeriesModel {
   }
 }
 
-class Season {
+class SeasonModel {
   final String? airDate;
   final int id;
   final String name;
@@ -58,9 +58,9 @@ class Season {
   final int number;
   final double rating;
   final int episodeCount;
-  late List<Episode> episodes;
+  late List<EpisodeModel> episodes;
 
-  Season({
+  SeasonModel({
     required this.airDate,
     required this.id,
     required this.name,
@@ -70,9 +70,23 @@ class Season {
     required this.rating,
     required this.episodeCount,
   });
+
+  factory SeasonModel.fromJson(Map jsonData) {
+    String base500PosterUrl = "https://image.tmdb.org/t/p/w500";
+    return SeasonModel(
+      airDate: jsonData["air_date"],
+      id: jsonData["id"],
+      name: jsonData["name"],
+      overview: jsonData["overview"],
+      poster: base500PosterUrl + jsonData["poster_path"],
+      number: jsonData["season_number"],
+      rating: double.parse((jsonData["vote_average"]).toStringAsFixed(1)),
+      episodeCount: jsonData["episodes"].length,
+    );
+  }
 }
 
-class Episode {
+class EpisodeModel {
   final int number;
   final String airDate;
   final String name;
@@ -81,8 +95,10 @@ class Episode {
   final int time;
   final String cover;
   final double rating;
+  final int totalVotes;
+  late List<ActorModel> actors;
 
-  Episode({
+  EpisodeModel({
     required this.number,
     required this.airDate,
     required this.name,
@@ -91,5 +107,20 @@ class Episode {
     required this.time,
     required this.cover,
     required this.rating,
+    required this.totalVotes,
   });
+
+  factory EpisodeModel.fromJson(Map jsonData) {
+    return EpisodeModel(
+      number: jsonData["episode_number"],
+      airDate: jsonData["air_date"],
+      name: jsonData["name"],
+      overview: jsonData["overview"],
+      id: jsonData["id"],
+      time: jsonData["runtime"],
+      cover: jsonData["still_path"],
+      rating: double.parse((jsonData["vote_average"]).toStringAsFixed(1)),
+      totalVotes: jsonData["vote_count"],
+    );
+  }
 }

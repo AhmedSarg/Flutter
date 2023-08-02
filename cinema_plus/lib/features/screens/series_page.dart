@@ -1,12 +1,12 @@
 import 'package:cinema_plus/core/bloc/bio_cubit/bio_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
-import 'package:cinema_plus/core/services/genre_service.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
 import 'package:cinema_plus/features/model/actor_model.dart';
 import 'package:cinema_plus/features/model/series_model.dart';
 import 'package:cinema_plus/features/screens/actor_page.dart';
 import 'package:cinema_plus/features/screens/genre_page.dart';
+import 'package:cinema_plus/features/screens/season_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -446,7 +446,11 @@ class _SeriesPageState extends State<SeriesPage> {
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: ((context, index) {
-                              return seasonCard(context, serie!.seasons[index]);
+                              return seasonCard(
+                                context,
+                                serie!.seasons[index],
+                                widget.serieId,
+                              );
                             }),
                             separatorBuilder: ((context, index) =>
                                 const Divider()),
@@ -596,10 +600,21 @@ Widget actorCard(context, ActorModel actor, String title) {
   );
 }
 
-Widget seasonCard(context, Season season) {
+Widget seasonCard(context, SeasonModel season, int serieId) {
   String ep = " Episodes";
   return GestureDetector(
-    onTap: () {},
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: ((context) => SeasonPage(
+                serieId: serieId,
+                seasonName: season.name,
+                seasonNumber: season.number,
+              )),
+        ),
+      );
+    },
     child: Container(
       margin: const EdgeInsets.only(left: 20, right: 10, top: 20, bottom: 20),
       width: 120,

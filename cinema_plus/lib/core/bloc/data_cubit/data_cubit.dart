@@ -26,6 +26,7 @@ class DataCubit extends Cubit<DataState> {
   late List<SeriesModel> topRatedSeries;
   late SeriesModel seriePage;
   late ActorModel actorPage;
+  late SeasonModel seasonPage;
   late List<dynamic> genres;
 
   void getExplore() async {
@@ -75,6 +76,17 @@ class DataCubit extends Cubit<DataState> {
     emit(DataLoading());
     try {
       genres = await genreService.getGenre(genreId);
+      emit(DataSuccess());
+    } catch (e) {
+      emit(DataFailure());
+    }
+  }
+
+  void getSeasonDetails(
+      {required int serieId, required int seasonNumber}) async {
+    emit(DataLoading());
+    try {
+      seasonPage = await seriesService.getSeasonDetails(serieId, seasonNumber);
       emit(DataSuccess());
     } catch (e) {
       emit(DataFailure());
