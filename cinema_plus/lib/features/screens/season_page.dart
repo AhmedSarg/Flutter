@@ -10,20 +10,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ActorPage extends StatefulWidget {
+class SeasonPage extends StatefulWidget {
   final int actorId;
   final String name;
-  const ActorPage({
+  const SeasonPage({
     super.key,
     required this.actorId,
     required this.name,
   });
 
   @override
-  State<ActorPage> createState() => _ActorPageState();
+  State<SeasonPage> createState() => _SeasonPageState();
 }
 
-class _ActorPageState extends State<ActorPage> {
+class _SeasonPageState extends State<SeasonPage> {
   @override
   Widget build(BuildContext context) {
     DataCubit cubit = BlocProvider.of<DataCubit>(context);
