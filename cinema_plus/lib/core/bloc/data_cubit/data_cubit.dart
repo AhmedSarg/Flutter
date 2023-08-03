@@ -89,6 +89,7 @@ class DataCubit extends Cubit<DataState> {
       seasonPage = await seriesService.getSeasonDetails(serieId, seasonNumber);
       emit(DataSuccess());
     } catch (e) {
+      print(e);
       emit(DataFailure());
     }
   }

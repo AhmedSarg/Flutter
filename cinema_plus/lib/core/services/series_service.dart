@@ -95,13 +95,9 @@ class SeriesService {
       result = value.data;
     });
     season = SeasonModel.fromJson(result);
-    print("check");
     result["episodes"].forEach((episode) {
-      print(episode);
       season.episodes.add(EpisodeModel.fromJson(episode));
-      print("done");
     });
-    print(season);
     return season;
   }
 

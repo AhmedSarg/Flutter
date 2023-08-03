@@ -58,7 +58,7 @@ class SeasonModel {
   final int number;
   final double rating;
   final int episodeCount;
-  late List<EpisodeModel> episodes;
+  late List<EpisodeModel> episodes = [];
 
   SeasonModel({
     required this.airDate,
@@ -111,6 +111,7 @@ class EpisodeModel {
   });
 
   factory EpisodeModel.fromJson(Map jsonData) {
+    String base500PosterUrl = "https://image.tmdb.org/t/p/w500";
     return EpisodeModel(
       number: jsonData["episode_number"],
       airDate: jsonData["air_date"],
@@ -118,7 +119,7 @@ class EpisodeModel {
       overview: jsonData["overview"],
       id: jsonData["id"],
       time: jsonData["runtime"],
-      cover: jsonData["still_path"],
+      cover: base500PosterUrl + jsonData["still_path"],
       rating: double.parse((jsonData["vote_average"]).toStringAsFixed(1)),
       totalVotes: jsonData["vote_count"],
     );

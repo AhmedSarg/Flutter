@@ -1,4 +1,4 @@
-import 'package:cinema_plus/core/bloc/bio_cubit/bio_cubit.dart';
+import 'package:cinema_plus/core/bloc/info_cubit/info_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
@@ -504,7 +504,7 @@ Widget actorCard(context, ActorModel actor, String title) {
         MaterialPageRoute(
           builder: ((context) => BlocProvider(
                 create: (context) {
-                  return BioCubit();
+                  return InfoCubit();
                 },
                 child: ActorPage(
                   actorId: actor.id!,
@@ -607,10 +607,15 @@ Widget seasonCard(context, SeasonModel season, int serieId) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: ((context) => SeasonPage(
-                serieId: serieId,
-                seasonName: season.name,
-                seasonNumber: season.number,
+          builder: ((context) => BlocProvider(
+                create: (context) {
+                  return InfoCubit();
+                },
+                child: SeasonPage(
+                  serieId: serieId,
+                  seasonName: season.name,
+                  seasonNumber: season.number,
+                ),
               )),
         ),
       );

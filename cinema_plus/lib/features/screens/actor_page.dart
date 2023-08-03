@@ -1,5 +1,5 @@
-import 'package:cinema_plus/core/bloc/bio_cubit/bio_cubit.dart';
-import 'package:cinema_plus/core/bloc/bio_cubit/bio_state.dart';
+import 'package:cinema_plus/core/bloc/info_cubit/info_cubit.dart';
+import 'package:cinema_plus/core/bloc/info_cubit/info_state.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_cubit.dart';
 import 'package:cinema_plus/core/bloc/data_cubit/data_state.dart';
 import 'package:cinema_plus/core/utils/app_colors.dart';
@@ -100,36 +100,35 @@ class _ActorPageState extends State<ActorPage> {
                           ),
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          top: 35,
-                        ),
-                        child: Text(
-                          "Biography",
-                          style: TextStyle(
-                              color: AppColors.offWhite,
-                              fontSize: 18,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(
-                          top: 10,
-                          bottom: 15,
+                          top: 50,
+                          bottom: 10,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                left: 20,
+                                right: 20,
+                              ),
+                              child: Text(
+                                "Biography",
+                                style: TextStyle(
+                                    color: AppColors.offWhite,
+                                    fontSize: 18,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0,
                               ),
-                              child: BlocBuilder<BioCubit, BioState>(
+                              child: BlocBuilder<InfoCubit, InfoState>(
                                 builder: ((context, state) {
-                                  if (state is BioHidden) {
+                                  if (state is InfoHidden) {
                                     return SizedBox(
                                       height: 100,
                                       child: Text(
@@ -158,13 +157,13 @@ class _ActorPageState extends State<ActorPage> {
                               ),
                             ),
                             Center(
-                              child: BlocBuilder<BioCubit, BioState>(
+                              child: BlocBuilder<InfoCubit, InfoState>(
                                 builder: ((context, state) {
-                                  if (state is BioHidden) {
+                                  if (state is InfoHidden) {
                                     return IconButton(
                                       onPressed: () {
-                                        BlocProvider.of<BioCubit>(context)
-                                            .switchBioState();
+                                        BlocProvider.of<InfoCubit>(context)
+                                            .switchInfoState();
                                       },
                                       icon: const Icon(
                                         FontAwesomeIcons.angleDown,
@@ -174,8 +173,8 @@ class _ActorPageState extends State<ActorPage> {
                                   } else {
                                     return IconButton(
                                       onPressed: () {
-                                        BlocProvider.of<BioCubit>(context)
-                                            .switchBioState();
+                                        BlocProvider.of<InfoCubit>(context)
+                                            .switchInfoState();
                                       },
                                       icon: const Icon(
                                         FontAwesomeIcons.angleUp,
